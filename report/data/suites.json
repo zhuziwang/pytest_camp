@@ -1,0 +1,202 @@
+{
+  "uid" : "98d3104e051c652961429bf95fa0b5d6",
+  "name" : "suites",
+  "children" : [ {
+    "name" : "ddt",
+    "children" : [ {
+      "name" : "login",
+      "children" : [ {
+        "name" : "Test_Commerce",
+        "children" : [ {
+          "name" : "test_login[listcases0]",
+          "uid" : "c9733d0b52f3d8f6",
+          "parentUid" : "478b8ee814cf8c48cff108c2ce4579eb",
+          "status" : "failed",
+          "time" : {
+            "start" : 1628610189256,
+            "stop" : 1628610195308,
+            "duration" : 6052
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "{'title': '登录用例', 'cases': [{'name': '打开登录页', 'method': 'geturl', 'url': 'http://my.kouyu100.com/demo0'}, {'name': '输入用户名', 'method': 'input', 'locator': '//*[@id=\"mainLoginForm\"]/div[1]/div[1]/input', 'value': 'a30'}, {'name': '输入密码', 'method': 'input', 'locator': '//*[@id=\"mainLoginForm\"]/div[1]/div[2]/input', 'value': 'ky100yanshi'}, {'name': '点击登录按钮', 'method': 'click', 'locator': '//*[@id=\"btnAutoLogin\"]'}, {'name': '判断段', 'method': 'assert_results', 'locator': '//*[@id=\"username\"]', 'Deserved_results': 'a31'}, {'name': '点击进入听说练习', 'method': 'click', 'locator': '//*[@id=\"nav\"]/li[3]/a'}]}" ]
+        } ],
+        "uid" : "478b8ee814cf8c48cff108c2ce4579eb"
+      } ],
+      "uid" : "c1a33fc729326d53bdb3d6eeea46149e"
+    }, {
+      "name" : "qushuju",
+      "children" : [ {
+        "name" : "Test_Commerce",
+        "children" : [ {
+          "name" : "test_login[table0]",
+          "uid" : "5e35a8fb346cf3f0",
+          "parentUid" : "19106aba2a841502a4417c60b29636b2",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628612876400,
+            "stop" : 1628612876400,
+            "duration" : 0
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['登录用例', '打开登录页', 'geturl', 'http://my.kouyu100.com/demo0', '', '']" ]
+        }, {
+          "name" : "test_login[table1]",
+          "uid" : "c965431391c4b294",
+          "parentUid" : "19106aba2a841502a4417c60b29636b2",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628612876404,
+            "stop" : 1628612876404,
+            "duration" : 0
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '输入用户名', 'input', '//*[@id=\"mainLoginForm\"]/div[1]/div[1]/input', 'a30', '']" ]
+        }, {
+          "name" : "test_login[table2]",
+          "uid" : "78427a8d4fc4336b",
+          "parentUid" : "19106aba2a841502a4417c60b29636b2",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628612876431,
+            "stop" : 1628612876431,
+            "duration" : 0
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '输入密码', 'input', '//*[@id=\"mainLoginForm\"]/div[1]/div[2]/input', 'ky100yanshi', '']" ]
+        }, {
+          "name" : "test_login[table3]",
+          "uid" : "15cceee2c31474f8",
+          "parentUid" : "19106aba2a841502a4417c60b29636b2",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628612876435,
+            "stop" : 1628612876435,
+            "duration" : 0
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '点击登录按钮', 'click', '//*[@id=\"btnAutoLogin\"]', '', '']" ]
+        }, {
+          "name" : "test_login[table4]",
+          "uid" : "6e20827d329cccdd",
+          "parentUid" : "19106aba2a841502a4417c60b29636b2",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628612876438,
+            "stop" : 1628612876438,
+            "duration" : 0
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '判断段', 'assert_results', '//*[@id=\"username\"]', 'a31', '']" ]
+        }, {
+          "name" : "test_login[table5]",
+          "uid" : "4ac56e2baaae11eb",
+          "parentUid" : "19106aba2a841502a4417c60b29636b2",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628612876443,
+            "stop" : 1628612876443,
+            "duration" : 0
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '点击进入听说练习', 'click', '//*[@id=\"nav\"]/li[3]/a', '', '']" ]
+        } ],
+        "uid" : "19106aba2a841502a4417c60b29636b2"
+      } ],
+      "uid" : "c7bb8acce55a5a0b0e42bafeb1d84bb1"
+    }, {
+      "name" : "login_excel",
+      "children" : [ {
+        "name" : "Test_Commerce",
+        "children" : [ {
+          "name" : "test_login[table0]",
+          "uid" : "cd7e531605964988",
+          "parentUid" : "7fb5d40ae80257862293c69e3890f52f",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628615086096,
+            "stop" : 1628615086772,
+            "duration" : 676
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['登录用例', '打开登录页', 'geturl', 'http://my.kouyu100.com/demo0', '', '']" ]
+        }, {
+          "name" : "test_login[table1]",
+          "uid" : "8aad05d3bb406da6",
+          "parentUid" : "7fb5d40ae80257862293c69e3890f52f",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628615086794,
+            "stop" : 1628615088252,
+            "duration" : 1458
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '输入用户名', 'input', '//*[@id=\"mainLoginForm\"]/div[1]/div[1]/input', 'a30', '']" ]
+        }, {
+          "name" : "test_login[table2]",
+          "uid" : "f7e9817a7fe751a4",
+          "parentUid" : "7fb5d40ae80257862293c69e3890f52f",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628615088255,
+            "stop" : 1628615088330,
+            "duration" : 75
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '输入密码', 'input', '//*[@id=\"mainLoginForm\"]/div[1]/div[2]/input', 'ky100yanshi', '']" ]
+        }, {
+          "name" : "test_login[table3]",
+          "uid" : "2ce3db621dd6732f",
+          "parentUid" : "7fb5d40ae80257862293c69e3890f52f",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628615088334,
+            "stop" : 1628615088382,
+            "duration" : 48
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '点击登录按钮', 'click', '//*[@id=\"btnAutoLogin\"]', '', '']" ]
+        }, {
+          "name" : "test_login[table4]",
+          "uid" : "6dd3c77eccb97aeb",
+          "parentUid" : "7fb5d40ae80257862293c69e3890f52f",
+          "status" : "failed",
+          "time" : {
+            "start" : 1628615088385,
+            "stop" : 1628615092183,
+            "duration" : 3798
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '判断段', 'assert_results', '//*[@id=\"username\"]', 'a31', '']" ]
+        }, {
+          "name" : "test_login[table5]",
+          "uid" : "3cd68e256b62a945",
+          "parentUid" : "7fb5d40ae80257862293c69e3890f52f",
+          "status" : "passed",
+          "time" : {
+            "start" : 1628615092214,
+            "stop" : 1628615092616,
+            "duration" : 402
+          },
+          "flaky" : false,
+          "newFailed" : false,
+          "parameters" : [ "['', '点击进入听说练习', 'click', '//*[@id=\"nav\"]/li[3]/a', '', '']" ]
+        } ],
+        "uid" : "7fb5d40ae80257862293c69e3890f52f"
+      } ],
+      "uid" : "b0e5af528ff5e2864cbaa33597b3b889"
+    } ],
+    "uid" : "c89bb59eb3116fa65be52387c9b08d60"
+  } ]
+}

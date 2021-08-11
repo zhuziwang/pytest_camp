@@ -1,0 +1,39 @@
+{
+  "uid" : "4b4757e66a1912dae1a509f688f20b0f",
+  "name" : "categories",
+  "children" : [ {
+    "name" : "Product defects",
+    "children" : [ {
+      "name" : "AssertionError: assert 'a30' == 'a31'\n  - a31\n  + a30",
+      "children" : [ {
+        "name" : "test_login[listcases0]",
+        "uid" : "c9733d0b52f3d8f6",
+        "parentUid" : "ff7ac3d16e8d41f2fa123e01e4d9bb12",
+        "status" : "failed",
+        "time" : {
+          "start" : 1628610189256,
+          "stop" : 1628610195308,
+          "duration" : 6052
+        },
+        "flaky" : false,
+        "newFailed" : false,
+        "parameters" : [ "{'title': '登录用例', 'cases': [{'name': '打开登录页', 'method': 'geturl', 'url': 'http://my.kouyu100.com/demo0'}, {'name': '输入用户名', 'method': 'input', 'locator': '//*[@id=\"mainLoginForm\"]/div[1]/div[1]/input', 'value': 'a30'}, {'name': '输入密码', 'method': 'input', 'locator': '//*[@id=\"mainLoginForm\"]/div[1]/div[2]/input', 'value': 'ky100yanshi'}, {'name': '点击登录按钮', 'method': 'click', 'locator': '//*[@id=\"btnAutoLogin\"]'}, {'name': '判断段', 'method': 'assert_results', 'locator': '//*[@id=\"username\"]', 'Deserved_results': 'a31'}, {'name': '点击进入听说练习', 'method': 'click', 'locator': '//*[@id=\"nav\"]/li[3]/a'}]}" ]
+      }, {
+        "name" : "test_login[table4]",
+        "uid" : "6dd3c77eccb97aeb",
+        "parentUid" : "ff7ac3d16e8d41f2fa123e01e4d9bb12",
+        "status" : "failed",
+        "time" : {
+          "start" : 1628615088385,
+          "stop" : 1628615092183,
+          "duration" : 3798
+        },
+        "flaky" : false,
+        "newFailed" : false,
+        "parameters" : [ "['', '判断段', 'assert_results', '//*[@id=\"username\"]', 'a31', '']" ]
+      } ],
+      "uid" : "ff7ac3d16e8d41f2fa123e01e4d9bb12"
+    } ],
+    "uid" : "8fb3a91ba5aaf9de24cc8a92edc82b5d"
+  } ]
+}
