@@ -16,4 +16,6 @@ from ddt.params import excel_params
 table_sheet=excel_params()
 #print(table_sheet)
 pytest.main(['-s','ddt/login_excel.py','--alluredir','temp','-s'])
-os.system('allure generate temp -o report --clean')
+os.system('allure generate temp -o report/html --clean')
+# os.system('copy environment.properties report\environment.properties')
+os.system('allure open report/html')
