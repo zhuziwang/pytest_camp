@@ -1,6 +1,13 @@
+# web端
 pytest-xdist	#测试用例分布式执行。多CPU分发。
 pytest-ordering	#用于改变测试用例的执行顺序
 pytest-rerunfailures		#用例失败后重跑
 pytest-html	#（用于生成html格式的自动化测试报告）
 allure-pytest	#用于生成美观的测试报告
 pyyaml
+
+# 安卓
+appium-python-client
+#https://pypi.tuna.tsinghua.edu.cn/simple/
+
+
