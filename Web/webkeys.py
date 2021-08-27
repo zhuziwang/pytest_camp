@@ -41,7 +41,7 @@ class WebKey:
         self.driver.quit()
 
 
-    def xpath(self,locator=''):
+    def xpath(self,ele_type='',locator=''):
         '''
         找到xpath
         :param locator: 定位器
@@ -49,27 +49,32 @@ class WebKey:
         '''
         ele = None
         self.ele = None
-        ele = self.driver.find_element_by_xpath(locator)
+        if ele_type == 'xpath':
+            ele = self.driver.find_element_by_xpath(locator)
+        elif ele_type == 'id':
+            ele = self.driver.find_element_by_id(locator)
+
+
         self.ele = ele
         return ele
 
-    def click(self,locator=None):
+    def click(self,ele_type=None,locator=None):
         '''
         找到，并点击元素
         :param locator: 定位器，默认xpath
         :return:
         '''
-        ele = self.xpath(locator)
+        ele = self.xpath(ele_type,locator)
         ele.click()
 
-    def input(self,locator=None,value=None):
+    def input(self,ele_type=None,locator=None,value=None):
         '''
         找到元素，并完成输入
         :param locator: 定位器，默认xpath
         :param value: 需要输入字符串
         :return:
         '''
-        ele = self.xpath(locator)
+        ele = self.xpath(ele_type,locator)
         ele.clear()
         ele.send_keys(str(value))
 

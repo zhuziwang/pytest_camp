@@ -8,6 +8,7 @@ loginPage:
 
       - name: 输入用户名
         method: input
+        ele_type: xpath
         locator: //*[@id="mainLoginForm"]/div[1]/div[1]/input
         value: a30
 
