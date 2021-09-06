@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 
 def youjian():
     sender = '2693601181@qq.com'  # 发送使用的邮箱
-    receivers = ['490644367@qq.com']  # 收件人，可以是多个任意邮箱
+    receivers = ['收件人']  # 收件人，可以是多个任意邮箱
 
     mail_msg = """
     <p>Python 邮件发送测试...</p>
@@ -16,7 +16,7 @@ def youjian():
     # 邮件正文
     message = MIMEText(mail_msg, 'html', 'utf-8')
     message['From'] = Header("朱秭旺", 'utf-8')  # 发送者
-    message['To'] = Header("马鹏鹏", 'utf-8')  # 接收者
+    message['To'] = Header("接收者", 'utf-8')  # 接收者
     #邮件标题
     subject = '测试报告！标题'
     message['Subject'] = Header(subject, 'utf-8')
@@ -36,7 +36,7 @@ def youjian():
     try:
         smtp = smtplib.SMTP_SSL('smtp.qq.com')
           # 登陆qq邮箱，密码需要使用的是授权码
-        smtp.login(sender, 'rsqboylrrlizdeaf')
+        smtp.login(sender, '授权码')
         smtp.sendmail(sender, receivers, message.as_string())
         smtp.quit()
         print("邮件发送成功")
