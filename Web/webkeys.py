@@ -29,8 +29,8 @@ class WebKey:
         #默认隐式等待20s
         self.driver.implicitly_wait(20)
 
-    def driver_time(self):
-        time.sleep(5)
+    def driver_time(self,dtime=None):
+        time.sleep(float(dtime))
 
     def geturl(self,url=None):
         '''
@@ -82,12 +82,22 @@ class WebKey:
 
     def strftime(self,ele_type=None,locator=None):
         '''
-        :return: 返回当前系统时间：格式为：2016-03-20 11:45:39形式
+        :return: 返回当前系统时间：格式为：2016-03-20形式
         '''
         strftime = time.strftime("%Y-%m-%d", time.localtime())
         ele = self.test_element(ele_type,locator)
         ele.clear()
         ele.send_keys(strftime)
+
+    def strftime_HMS(self,ele_type=None,locator=None):
+        '''
+        :return: 返回当前系统时间：格式为：2016-03-20 11:45:39形式
+        '''
+        strftime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        ele = self.test_element(ele_type,locator)
+        ele.clear()
+        ele.send_keys(strftime)
+
 
     def maximize_window(self):
         '''
@@ -216,8 +226,7 @@ class WebKey:
         -------
         '''
         element = self.test_element(ele_type,locator)
-        Action = ActionChains(self.driver).move_to_element(element).perform()
-        return Action.text()
+        ActionChains(self.driver).move_to_element(element).perform()
 
     def send_keys(self,ele_type=None,locator=None,value=None,ctrl_value=None):
         '''
@@ -436,7 +445,7 @@ class WebKey:
         -------
         '''
         title1 = self.driver.title
-        print(title1)
+        # print(title1)
         return title1
 
     def get_attribute(self, name=None):
@@ -488,3 +497,51 @@ class WebKey:
         ele.clear()
         ele.send_keys(str(b))
 
+    def stattime_HMS(self,ele_type=None,locator=None):
+        '''时间输入框，输入明天的时间，格式XXXX/XX/XX'''
+        import datetime
+        a= datetime.datetime.now()
+        b = (a + datetime.timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
+        ele = self.test_element(ele_type,locator)
+        ele.clear()
+        ele.send_keys(str(b))
+
+    def move_to_element_text(self,ele_type=None,locator=None):
+        '''
+        执行鼠标悬停操作
+        Parameters
+        ----------
+        element：定位需要悬停的元素怒
+        ActionChains(self.driver)：构造ActionChains对象
+        perform()：执行所有 ActionChains 中存储的行为，可以理解成是对整个操作的提交动作
+        Returns：返回悬停显示的文本
+        -------
+        '''
+        element = self.test_element(ele_type,locator)
+        Action = ActionChains(self.driver).move_to_element(element).perform()
+        return Action.text()
+
+    def gotoStudentLevelHome(self):
+        '''
+        判断是否有查阅暑假练听说首页弹窗,如果有就关闭，没有不动
+        :return:
+        '''
+        if self.test_element('xpath','//*[@id="check"]').get_attribute('outerHTML') == '<a id="check" href="gotoStudentLevelHome.action?isSummer=1" style="width: 144px; height: 40px; display: inline-block; background: url(&quot;http://static2.kouyu100.com/images3/teacher/summerHoliday/chayu210902.png&quot;) no-repeat;"></a>':
+            self.test_element('xpath','//*[@id="closeImg1"]/img').click()
+        else:
+            pass
+
+    def Login_update(self,br='Chrome',url='',username='',password=''):
+        self.openbrwser(br)
+        self.geturl(url)
+        name = self.test_element('xpath','//*[@id="mainLoginForm"]/div[1]/div[1]/input')
+        name.clear()
+        name.send_keys(username)
+        pws = self.test_element('xpath','//*[@id="mainLoginForm"]/div[1]/div[2]/input')
+        pws.clear()
+        pws.send_keys(password)
+        self.test_element('xpath','//*[@id="btnAutoLogin"]').click()
+        if self.test_element('xpath','//*[@id="check"]').get_attribute('outerHTML') == '<a id="check" href="gotoStudentLevelHome.action?isSummer=1" style="width: 144px; height: 40px; display: inline-block; background: url(&quot;http://static2.kouyu100.com/images3/teacher/summerHoliday/chayu210902.png&quot;) no-repeat;"></a>':
+            self.test_element('xpath','//*[@id="closeImg1"]/img').click()
+        else:
+            pass
