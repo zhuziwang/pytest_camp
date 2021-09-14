@@ -7,7 +7,7 @@ from appium.webdriver.extensions .android.nativekey import AndroidKey
 
 desired_caps = {
     'platformName':'Android',
-    'platformVersion':'6.0.1', #手机android版本
+    'platformVersion':'11', #手机android版本
     'deviceName':'localhost', #设别名称，随意填写
     'appPackage':'com.arivoc.kouyu',    #启动的app名称
     'appActivity':'com.arivoc.kouyu100.WelcomeActivity',   #启动的main页面
@@ -33,7 +33,9 @@ class AppKey:
 
     def test_element(self, ele_type='', locator=''):
         '''
-        :param ele_type:
+        :param ele_type:    textContains：文本包含
+                            textMatches：文本正则
+                            textStartsWith：文本起始匹配
         :param locator:
         :return:
         '''
@@ -47,8 +49,17 @@ class AppKey:
             ele = self.driver.find_element_by_xpath(locator)
         elif ele_type == 'name':
             ele = self.driver.find_element_by_name(locator)
+        elif ele_type == 'text':
+            ele = self.driver.find_element_by_new_UiSelector().text(locator)
+        elif ele_type == 'textContains':
+            ele = self.driver.find_element_by_new_UiSelector().textContains(locator)
+        elif ele_type == 'textMatches':
+            ele = self.driver.find_element_by_new_UiSelector().textMatches(locator)
+        elif ele_type == 'textStartsWith':
+            ele = self.driver.find_element_by_new_UiSelector().textStartsWith(locator)
         elif ele_type == 'android_uiautomator_text':
-            ele = self.driver.find_element_by_android_uiautomator('new UiSelector().text(%s)'.format(locator))
+            ele = self.driver.find_element_by_android_uiautomator('new UiSelector().text(%s)')%locator
+            print (ele.text)
         self.ele = ele
         return ele
 
@@ -73,6 +84,9 @@ class AppKey:
         输入内容
         '''
         self.test_element(ele_type, locator).send_keys(send)
+
+    def driver_time(self,dtime=None):
+        time.sleep(float(dtime))
 
     def backgroud_app(self,time=None):
         '''
@@ -174,13 +188,13 @@ class AppKey:
         get_windows_size = self.driver.get_window_size()
         return get_windows_size
 
-    def swip(self,start_x=None,start_y=None,end_x=None,end_y=None,duration=None):
+    def swipe(self,start_x=None,start_y=None,end_x=None,end_y=None,duration=None):
         '''
         滑动屏幕
         :param duration: 移动的时间间隔
         :return:
         '''
-        self.driver.swip(start_x,start_y,end_x,end_y,duration)
+        self.driver.swipe(start_x,start_y,end_x,end_y,duration)
 
     def get_screenshot_as_file(self,file_path=''):
         '''
@@ -273,3 +287,61 @@ class AppKey:
         title = self.driver.title
         print(title)
         return title
+
+    def New_version_tips(self):
+        '''
+        如果有新版本更新就点击取消安装
+        :return:
+        '''
+        ele = self.test_element('id','com.arivoc.kouyu:id/tv_title_upload').text
+        version_a = '发现新版本'
+        if version_a in ele:
+            self.test_element('id','com.arivoc.kouyu:id/tv_quxiao').click()
+            # updata_text = self.test_element('id','com.arivoc.kouyu: id / tv_content_update').text()
+        else:
+            pass
+
+    def Login_update(self,school='',username='',password=''):
+        '''
+        输入学校，用户名，密码，判断学校默认是否与输入一致后登录
+        如果有新版本更新就点击取消安装,并获取更新版本和更新日志
+        :return: ele：更新版本
+        '''
+
+        if self.test_element('id','com.arivoc.kouyu:id/tv_already_schools').get_attribute('textContent') == school :
+            name = self.test_element('id','com.arivoc.kouyu:id/et_username')
+            name.clear()
+            name.send_keys(username)
+            pws = self.test_element('id','com.arivoc.kouyu:id/et_password')
+            pws.clear()
+            pws.send_keys(password)
+            self.test_element('id','com.arivoc.kouyu:id/btn_login').click()
+            ele = self.test_element('id','com.arivoc.kouyu:id/tv_title_upload').get_attribute('textContent')
+            version_a = '发现新版本'
+            if version_a in ele:
+                self.test_element('id','com.arivoc.kouyu:id/tv_quxiao').click()
+                updata_text = self.test_element('id','com.arivoc.kouyu: id / tv_content_update').text()
+                return ele,updata_text
+            else:
+                pass
+        elif self.test_element('id','com.arivoc.kouyu:id/tv_already_schools').get_attribute('textContent') is not school:
+            self.test_element('id','com.arivoc.kouyu:id/tv_change_schools').click()
+            self.test_element('id','com.arivoc.kouyu:id/editFun_imgView').click()
+            self.test_element('id','com.arivoc.kouyu:id/editFun_imgView').send_keys(school)
+            self.test_element('xpath','	/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.LinearLayout[2]/android.widget.FrameLayout/android.widget.ListView/android.widget.LinearLayout[1]').click()
+
+            name = self.test_element('id', 'com.arivoc.kouyu:id/et_username')
+            name.clear()
+            name.send_keys(username)
+            pws = self.test_element('id', 'com.arivoc.kouyu:id/et_password')
+            pws.clear()
+            pws.send_keys(password)
+            self.test_element('id', 'com.arivoc.kouyu:id/btn_login').click()
+            ele = self.test_element('id', 'com.arivoc.kouyu:id/tv_title_upload').get_attribute('textContent')
+            version_a = '发现新版本'
+            if version_a in ele:
+                self.test_element('id', 'com.arivoc.kouyu:id/tv_quxiao').click()
+                updata_text = self.test_element('id', 'com.arivoc.kouyu: id / tv_content_update').text()
+                return ele, updata_text
+            else:
+                pass
