@@ -4,6 +4,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 import os
 import time
+
 class WebKey:
 
     def __init__(self):
@@ -38,7 +39,7 @@ class WebKey:
         :param url: 地址
         :return:
         '''
-        self.driver.get(url)
+        self.driver.get('http://my.kouyu100.com/demo0')
 
     def back(self):
         '''
@@ -61,24 +62,25 @@ class WebKey:
         self.driver.refresh()
 
     def clear(self):
-        '''
-        清空文本
-        Returns
-        -------
-        '''
+        '''清空文本'''
         self.driver.clear()
 
     def submit(self):
-        '''
-        提交表单
-        Returns
-        -------
-        '''
+        '''提交表单'''
         self.driver.submit()
 
     def quit(self):
         '''退出'''
         self.driver.quit()
+
+
+#时间
+    def str_time(self):
+        '''
+        :return: 返回当前系统时间：格式为：2016-03-20形式
+        '''
+        str_time = time.strftime("%Y-%m-%d", time.localtime())
+        return str_time
 
     def strftime(self,ele_type=None,locator=None):
         '''
@@ -98,7 +100,30 @@ class WebKey:
         ele.clear()
         ele.send_keys(strftime)
 
+    def stattime(self,ele_type=None,locator=None):
+        '''时间输入框，输入明天的时间，格式XXXX/XX/XX'''
+        import datetime
+        a= datetime.datetime.now()
+        b = (a + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+        ele = self.test_element(ele_type,locator)
+        ele.clear()
+        ele.send_keys(str(b))
 
+    def stattime_HMS(self,ele_type=None,locator=None):
+        '''时间输入框，输入明天的时间，格式XXXX/XX/XX2016-03-20 11:45:39'''
+        import datetime
+        a= datetime.datetime.now()
+        b = (a + datetime.timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
+        ele = self.test_element(ele_type,locator)
+        ele.clear()
+        ele.send_keys(str(b))
+
+
+
+
+
+
+#操作
     def maximize_window(self):
         '''
         浏览器最大化
@@ -129,19 +154,21 @@ class WebKey:
         if ele_type == 'id':
             ele = self.driver.find_element_by_id(locator)
         elif ele_type == 'name':
-            ele = self.driver.find_element_by_name(locator)
+            ele = self.driver.find_elements_by_name(locator)
         elif ele_type == 'class_name':
-            ele = self.driver.find_element_by_class_name(locator)
+            ele = self.driver.find_elements_by_class_name(locator)
         elif ele_type == 'tag_name':
-            ele = self.driver.find_element_by_tag_name(locator)
+            ele = self.driver.find_elements_by_tag_name(locator)
         elif ele_type == 'css':
-            ele = self.driver.find_element_by_css_selector(locator)
+            ele = self.driver.find_elements_by_css_selector(locator)
         elif ele_type == 'xpath':
             ele = self.driver.find_element_by_xpath(locator)
         elif ele_type == 'link_text':
             ele = self.driver.find_element_by_link_text(locator)
         elif ele_type == 'partial_link_text':
-            ele = self.driver.find_element_by_partial_link_text(locator)
+            ele = self.driver.find_elements_by_partial_link_text(locator)
+        elif ele_type == 'xpaths':
+            ele = self.driver.find_elements_by_xpath(locator)
         self.ele = ele
         return ele
 
@@ -159,16 +186,13 @@ class WebKey:
         size = ele.size()
         return size
 
-    def click(self,ele_type=None,locator=None):
+    def click(self,ele_type=None,locator=None,num=None):
         '''点击'''
-        ele = self.test_element(ele_type,locator)
-        ele.click()
-
-
-    def click2(self,ele_type=None,locator=None):
-        '''点击'''
-        ele = self.test_element(ele_type,locator)
-        ele.click()
+        if num == None:
+            self.test_element(ele_type, locator).click()
+        else:
+            ele = self.test_element(ele_type, locator, num)
+            ele[num].click()
 
     def context_click(self,ele_type=None,locator=None):
         '''
@@ -250,7 +274,7 @@ class WebKey:
         ele = self.test_element(ele_type,locator)
         ele.send_keys(value,str(ctrl_value))
 
-    def input(self,ele_type=None,locator=None,value=None):
+    def input(self,ele_type=None,locator=None,value=None,num=None):
         '''
         模拟键盘按键
         :param ele_type:
@@ -258,9 +282,14 @@ class WebKey:
         :param value: 输入text
         :return:
         '''
-        ele = self.test_element(ele_type,locator)
-        ele.clear()
-        ele.send_keys(str(value))
+        if num == None:
+            ele=self.test_element(ele_type, locator)
+            ele.clear()
+            ele.send_keys(value)
+        else:
+            ele = self.test_element(ele_type, locator, num)
+            ele.clear()
+            ele[num].send_keys(value)
 
     def text(self,ele_type=None,locator=None):
         '''
@@ -364,14 +393,18 @@ class WebKey:
         :send_keys: 发送文本至警告框。keysToSend：将文本发送至警告框。
         '''
         if choice == 'text':
-            alert_text = self.driver.switch_to.alert.text()
+            del_alert = self.driver.switch_to.alert
+            alert_text = del_alert.text()
             return alert_text
         elif choice == 'accept':
-            self.driver.switch_to.alert.accept()
+            del_alert=self.driver.switch_to.alert
+            del_alert.accept()
         elif choice == 'dismiss':
-            self.driver.switch_to.alert.dismiss()
+            del_alert = self.driver.switch_to.alert
+            del_alert.dismiss()
         elif choice == 'send_keys':
-            self.driver.switch_to.alert.send_keys(keysToSend)
+            del_alert = self.driver.switch_to.alert
+            del_alert.send_keys(keysToSend)
 
     def select(self,ele_type=None,locator=None,select_by=None,value=None):
         '''
@@ -425,7 +458,7 @@ class WebKey:
     def get_screenshot_as_file(self,filename=None):
         '''
         窗口截图
-        :param filename: 用于截取当前窗口，并把图片保存到本地，格式为：D:\\baidu.jpg
+        :param filename: 用于截取当前窗口，并把图片保存到本地，格式为：D:\\baidu.png
         '''
         self.driver.get_screenshot_as_file(filename)
 
@@ -462,6 +495,8 @@ class WebKey:
         get_attribute = self.driver.get_attribute(name)
         return get_attribute
 
+
+#断言
     def assert_results(self,ele_type=None,locator=None,Deserved_results=None):
         '''text断言'''
         self.Deserved_results = Deserved_results
@@ -488,23 +523,7 @@ class WebKey:
         self.driver.execute_script('arguments[0].click()',qzdj)
         return qzdj
 
-    def stattime(self,ele_type=None,locator=None):
-        '''时间输入框，输入明天的时间，格式XXXX/XX/XX'''
-        import datetime
-        a= datetime.datetime.now()
-        b = (a + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-        ele = self.test_element(ele_type,locator)
-        ele.clear()
-        ele.send_keys(str(b))
 
-    def stattime_HMS(self,ele_type=None,locator=None):
-        '''时间输入框，输入明天的时间，格式XXXX/XX/XX'''
-        import datetime
-        a= datetime.datetime.now()
-        b = (a + datetime.timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
-        ele = self.test_element(ele_type,locator)
-        ele.clear()
-        ele.send_keys(str(b))
 
     def move_to_element_text(self,ele_type=None,locator=None):
         '''
@@ -526,22 +545,118 @@ class WebKey:
         判断是否有查阅暑假练听说首页弹窗,如果有就关闭，没有不动
         :return:
         '''
-        if self.test_element('xpath','//*[@id="check"]').get_attribute('outerHTML') == '<a id="check" href="gotoStudentLevelHome.action?isSummer=1" style="width: 144px; height: 40px; display: inline-block; background: url(&quot;http://static2.kouyu100.com/images3/teacher/summerHoliday/chayu210902.png&quot;) no-repeat;"></a>':
-            self.test_element('xpath','//*[@id="closeImg1"]/img').click()
+        if self.test_element('xpaths', '//*[@id="check"]') != []:
+            self.test_element('xpath', '//*[@id="closeImg1"]/img').click()
+        elif self.test_element('xpaths', '//*[@id="teacherTipsDivUl"]') != []:
+            self.test_element('xpath', '//*[@id="teacherTipsDiv"]/div/img').click()
         else:
             pass
 
-    def Login_update(self,br='Chrome',url='',username='',password=''):
+    def Login_update(self, br='Chrome', url='', username='zdht', password='999888'):
+        '''
+        登录用例，判断首页弹窗
+        :param br: 浏览器
+        :param url: 网站
+        :param username: 用户名
+        :param password: 密码
+        :return:
+        '''
         self.openbrwser(br)
         self.geturl(url)
-        name = self.test_element('xpath','//*[@id="mainLoginForm"]/div[1]/div[1]/input')
+        name = self.test_element('xpath', '//*[@id="mainLoginForm"]/div[1]/div[1]/input')
         name.clear()
         name.send_keys(username)
-        pws = self.test_element('xpath','//*[@id="mainLoginForm"]/div[1]/div[2]/input')
+        pws = self.test_element('xpath', '//*[@id="mainLoginForm"]/div[1]/div[2]/input')
         pws.clear()
         pws.send_keys(password)
-        self.test_element('xpath','//*[@id="btnAutoLogin"]').click()
-        if self.test_element('xpath','//*[@id="check"]').get_attribute('outerHTML') == '<a id="check" href="gotoStudentLevelHome.action?isSummer=1" style="width: 144px; height: 40px; display: inline-block; background: url(&quot;http://static2.kouyu100.com/images3/teacher/summerHoliday/chayu210902.png&quot;) no-repeat;"></a>':
-            self.test_element('xpath','//*[@id="closeImg1"]/img').click()
-        else:
-            pass
+        self.test_element('xpath', '//*[@id="btnAutoLogin"]').click()
+        self.gotoStudentLevelHome()
+
+    def picture(self,url='http://192.168.1.152:8080/jenkins/job/SVN/allure/'):
+        driver= webdriver.Chrome()
+        driver.get(url)
+        driver.maximize_window()
+        time.sleep(30)
+        driver.refresh()
+        time.sleep(5)
+        picture_time = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
+        try:
+            driver.get_screenshot_as_file('C:\\Users\\Administrator\\PycharmProjects\\kouyu100\\image\\picture\\'+picture_time+'.png')
+            print('截图成功')
+        except BaseException as msg:
+            print(msg)
+        return picture_time+'.png'
+
+
+
+
+
+
+
+
+
+
+
+#学生
+    def work_info_list(self,work_info_text=''):
+        '''
+        手机作业&成绩中小黑板中查找work_info_text文本的作业后点击
+        :param work_info_text:
+        :return:
+        '''
+        for i in range(1,13):
+            xpath_num ='//*[@id="slidesindex"]/div[%s]'%i
+            xpath_text = self.test_element('xpath',xpath_num).text
+            if work_info_text in xpath_text:
+                self.test_element('xpath',xpath_num).click()
+                break
+            else:
+                continue
+
+    def word_option(self):
+        '''
+        遍历单词选项，找到选项后，配以单词是否一致
+        :return:
+        '''
+        from models.sql import py_mysql
+        py_mysql = py_mysql()
+
+        for i in range(0,2):
+            test = self.test_element('class_name', 'word-topic', 0 ).text
+            print(len(test),test)
+            test_str = test[4:]
+            sql0 = "SELECT word from w2m_wordclass where cnText = '{}' LIMIT 1;" .format(test_str)
+            sql1 = "SELECT word from w2m_wordclass where cnText like '{}%' LIMIT 1;" .format(test_str)
+            fanyi0 = py_mysql.mysql(sql0)
+            if str(fanyi0) == 'None':
+                fanyi1 = py_mysql.mysql(sql1)
+                Eng_fanyi = fanyi1[0]
+            else:
+                Eng_fanyi = fanyi0[0]
+
+            option_a=self.test_element('class_name', 'option A').text
+            option_b=self.test_element('class_name', 'option B').text
+            option_c=self.test_element('class_name', 'option C').text
+            print(len(option_a),option_a)
+
+            time.sleep(1)
+            if option_a[3:] == Eng_fanyi:
+                self.test_element('class_name', 'option A').click()
+                time.sleep(2.5)
+            elif option_b[3:] == Eng_fanyi:
+                self.test_element('class_name', 'option B').click()
+                time.sleep(2.5)
+            elif option_c[3:] == Eng_fanyi:
+                self.test_element('class_name', 'option C').click()
+                time.sleep(2.5)
+            else:
+                self.test_element('class_name', 'option D').click()
+                time.sleep(2.5)
+
+
+
+
+
+
+
+
