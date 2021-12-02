@@ -42,7 +42,7 @@ def youjian():
     try:
         smtp = smtplib.SMTP_SSL('smtp.qq.com')
           # 登陆qq邮箱，密码需要使用的是授权码
-        smtp.login(sender, 'rsqboylrrlizdeaf')
+        smtp.login(sender, '***')
         smtp.sendmail(sender, receivers, msgRoot.as_string())
         smtp.quit()
         print("邮件发送成功")

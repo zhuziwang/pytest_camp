@@ -572,7 +572,7 @@ class WebKey:
         self.test_element('xpath', '//*[@id="btnAutoLogin"]').click()
         self.gotoStudentLevelHome()
 
-    def picture(self,url='http://192.168.1.152:8080/jenkins/job/SVN/allure/'):
+    def picture(self,url='http://ip地址/jenkins/job/SVN/allure/'):
         driver= webdriver.Chrome()
         driver.get(url)
         driver.maximize_window()

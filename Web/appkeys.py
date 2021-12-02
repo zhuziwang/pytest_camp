@@ -14,8 +14,8 @@ desired_caps_phone = {
     'platformName':'Android',
     'platformVersion':'11', #手机android版本111
     'deviceName':'正常手机设备', #设别名称，随意填写
-    'appPackage':'com.arivoc.kouyu',    #启动的app名称
-    'appActivity':'com.arivoc.kouyu100.WelcomeActivity',   #启动的main页面
+    'appPackage':'',    #启动的app名称
+    'appActivity':'',   #启动的main页面
     'unicodeKeyboard':True, #使用自带输入法，输入中文时填True
     'resetKeyboard':True,   #执行完程序恢复原来输入法
     'noReset':True, #不要重置App
@@ -26,8 +26,8 @@ desired_caps_simulator = {
     'platformName':'Android',
     'platformVersion':'11', #手机android版本111
     'deviceName':'虚拟机', #设别名称，随意填写
-    'appPackage':'com.arivoc.kouyu',    #启动的app名称
-    'appActivity':'com.arivoc.kouyu100.login.ui.LoginActivity',   #启动的main页面
+    'appPackage':'',    #启动的app名称
+    'appActivity':'',   #启动的main页面
     'unicodeKeyboard':True, #使用自带输入法，输入中文时填True
     'resetKeyboard':True,   #执行完程序恢复原来输入法
     'noReset':True, #不要重置App
