@@ -46,7 +46,7 @@ def app_excel_params():
     return app_table_sheet
 
 def demo_sql_params():
-    from models.sql import py_mysql
+    from models.model_sql import py_mysql
     py_mysql=py_mysql()
     sql1 = 'sql'
     data = py_mysql.mysql(sql1)
