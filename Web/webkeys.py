@@ -39,7 +39,7 @@ class WebKey:
         :param url: 地址
         :return:
         '''
-        self.driver.get('http://my.kouyu100.com/demo0')
+        self.driver.get(url)
 
     def back(self):
         '''
