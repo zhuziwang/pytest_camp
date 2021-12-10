@@ -4,13 +4,13 @@ import pymysql
 '''
 class py_mysql():
     db = pymysql.connect(
-        host='',
+        host='localhost',
         port=3306,
-        user='',
-        password='',
-        database='',
+        user='root',
+        password='123456',
+        database='mapping',
         charset='utf8'
-    )s
+    )
     def mysql(self,sql=None):
 
         cursor = py_mysql.db.cursor()

@@ -2,11 +2,11 @@ import pymysql
 
 class py_mysql():
     db = pymysql.connect(
-        host='',
+        host='localhost',
         port=3306,
-        user='',
-        password='',
-        database='',
+        user='root',
+        password='123456',
+        database='mapping',
         charset='utf8'
     )
     def mysql(self,sql=None):
@@ -18,3 +18,5 @@ class py_mysql():
         # cursor.close()
 
         return data
+
+

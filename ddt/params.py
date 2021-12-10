@@ -48,7 +48,7 @@ def app_excel_params():
 def demo_sql_params():
     from models.model_sql import py_mysql
     py_mysql=py_mysql()
-    sql1 = 'sql'
+    sql1 = "select uname,ukey,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10 from yongli1"
     data = py_mysql.mysql(sql1)
     return data
 
