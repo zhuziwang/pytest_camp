@@ -2,8 +2,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 import time
+
 
 class WebKey:
 
@@ -28,7 +30,7 @@ class WebKey:
             print('F')
 
         #默认隐式等待20s
-        self.driver.implicitly_wait(20)
+        self.driver.implicitly_wait(5)
 
     def driver_time(self,dtime=None):
         time.sleep(float(dtime))
@@ -552,25 +554,40 @@ class WebKey:
         else:
             pass
 
-    def Login_update(self, br='Chrome', url='', username='zdht', password='999888'):
+    def login_out(self):
+        '''退出登录'''
+        out = self.driver.find_elements_by_class_name('loginOut')
+        if out != []:
+            self.click(out)
+        else:
+            pass
+
+    def Login_update(self, br='Chrome', url='', username='', password=''):
         '''
         登录用例，判断首页弹窗
         :param br: 浏览器
         :param url: 网站
         :param username: 用户名
         :param password: 密码
+        :DesiredCapabilities.CHROME：设置chrome浏览器，["pageLoadStrategy"] = "none"：html下载完成，不等待解析完成即返回   #用前注意
         :return:
         '''
         self.openbrwser(br)
+        desired_capabilities = DesiredCapabilities.CHROME
+        desired_capabilities["pageLoadStrategy"] = "none"
         self.geturl(url)
-        name = self.test_element('xpath', '//*[@id="mainLoginForm"]/div[1]/div[1]/input')
+        self.maximize_window()
+        self.login_out()
+        self.click('class_name', 'login',0)
+        self.click('class_name', 'style__navList-2ZtUx',1)
+        name = self.test_element('xpath', '//*[@id="root"]/div/div/div[2]/div/div[2]/div/div[2]/div[1]/div[1]/input')
         name.clear()
         name.send_keys(username)
-        pws = self.test_element('xpath', '//*[@id="mainLoginForm"]/div[1]/div[2]/input')
+        pws = self.test_element('xpath', '//*[@id="root"]/div/div/div[2]/div/div[2]/div/div[2]/div[2]/div[1]/input')
         pws.clear()
         pws.send_keys(password)
-        self.test_element('xpath', '//*[@id="btnAutoLogin"]').click()
-        self.gotoStudentLevelHome()
+        self.test_element('xpath', '//*[@id="root"]/div/div/div[2]/div/div[2]/div/div[2]/div[5]').click()
+        # self.gotoStudentLevelHome()
 
     def picture(self,url='http://ip地址/jenkins/job/SVN/allure/'):
         driver= webdriver.Chrome()
