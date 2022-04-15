@@ -354,7 +354,7 @@ class WebKey:
         for handle in all_handles:
             if handle != sreach_windows:
                 self.driver.switch_to.window(handle)
-                print('切换句柄到新窗口')
+                print('切换句柄到新窗口,handle是%s'%handle)
             pass
         pass
 
@@ -368,14 +368,15 @@ class WebKey:
         all_handles = self.driver.window_handles
         for handle in all_handles:
             if handle != sreach_windows:
+                print(handle)
                 self.driver.switch_to.window(handle)
-                print('切换句柄到之前窗口')
+                print('切换句柄到之前窗口,handle是%s'%handle)
             pass
         pass
 
-    def close(self):
+    def window_close(self):
         '''
-        关闭非当前定位到句柄的窗口
+        关闭当前定位到句柄的窗口,并定位到其他窗口（两个窗口的情况下是定位到另一个窗口）
         Returns
         -------
         '''
@@ -384,6 +385,7 @@ class WebKey:
         for handle in all_handles:
             if handle != sreach_windows:
                 self.driver.close()
+                self.driver.switch_to.window(handle)
             pass
         pass
 
@@ -503,6 +505,12 @@ class WebKey:
         '''text断言'''
         self.Deserved_results = Deserved_results
         Actual_results = self.test_element(ele_type,locator).text
+        return Actual_results
+
+    def assert_results_img_src(self,ele_type=None,locator=None,Deserved_results=None):
+        '''图片src断言'''
+        self.Deserved_results = Deserved_results
+        Actual_results = self.test_element(ele_type,locator).get_attribute("src")
         return Actual_results
 
     def is_displayed(self,ele_type=None,locator=None):
