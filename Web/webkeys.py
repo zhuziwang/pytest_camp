@@ -5,21 +5,28 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 import time
-
+from pathlib import Path        #导入path
 
 class WebKey:
 
     def __init__(self):
         self.driver = None
 
-    def openbrwser(self,br='Chrome'):
+    def openbrwser(self, br='Chrome'):
         '''
         打开浏览器
-        :param br:
+        :param br: 如果是谷歌，profile.default_content_settings.popups：设置为0禁止弹出下载窗口
         :return:
         '''
         if br == 'Chrome':
-            self.driver = webdriver.Chrome()
+            str_time = self.str_time()
+            str_time = str(str_time)
+            BASE_DIR = self.BASE_DIR_PATH()
+            file_path = BASE_DIR+'\\download\\Chrom_download\\'+str_time+'\\'
+            options = webdriver.ChromeOptions()
+            prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': file_path}
+            options.add_experimental_option('prefs', prefs)
+            self.driver = webdriver.Chrome(chrome_options=options)
         elif br == 'edg':
             self.driver = webdriver.Edge()
         elif br == 'Firefox':
@@ -32,10 +39,18 @@ class WebKey:
         #默认隐式等待20s
         self.driver.implicitly_wait(5)
 
-    def driver_time(self,dtime=None):
+    def driver_time(self, dtime=None):
         time.sleep(float(dtime))
 
-    def geturl(self,url=None):
+    def BASE_DIR_PATH(self):
+        '''
+        获取项目地址
+        :return:
+        '''
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        return BASE_DIR
+
+    def geturl(self, url=None):
         '''
         打开URL
         :param url: 地址
@@ -84,34 +99,34 @@ class WebKey:
         str_time = time.strftime("%Y-%m-%d", time.localtime())
         return str_time
 
-    def strftime(self,ele_type=None,locator=None):
+    def strftime(self, ele_type=None, locator=None):
         '''
         :return: 返回当前系统时间：格式为：2016-03-20形式
         '''
         strftime = time.strftime("%Y-%m-%d", time.localtime())
-        ele = self.test_element(ele_type,locator)
+        ele = self.test_element(ele_type, locator)
         ele.clear()
         ele.send_keys(strftime)
 
-    def strftime_HMS(self,ele_type=None,locator=None):
+    def strftime_HMS(self, ele_type=None, locator=None):
         '''
         :return: 返回当前系统时间：格式为：2016-03-20 11:45:39形式
         '''
         strftime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        ele = self.test_element(ele_type,locator)
+        ele = self.test_element(ele_type, locator)
         ele.clear()
         ele.send_keys(strftime)
 
-    def stattime(self,ele_type=None,locator=None):
+    def stattime(self, ele_type=None, locator=None):
         '''时间输入框，输入明天的时间，格式XXXX/XX/XX'''
         import datetime
         a= datetime.datetime.now()
         b = (a + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-        ele = self.test_element(ele_type,locator)
+        ele = self.test_element(ele_type, locator)
         ele.clear()
         ele.send_keys(str(b))
 
-    def stattime_HMS(self,ele_type=None,locator=None):
+    def stattime_HMS(self, ele_type=None, locator=None):
         '''时间输入框，输入明天的时间，格式XXXX/XX/XX2016-03-20 11:45:39'''
         import datetime
         a= datetime.datetime.now()
@@ -119,6 +134,17 @@ class WebKey:
         ele = self.test_element(ele_type,locator)
         ele.clear()
         ele.send_keys(str(b))
+
+    def get_allfile(self, file_path):
+        '''
+        获取所有文件
+        listdir返回文件中所有目录
+        '''
+        all_file = []
+        for f in os.listdir(file_path):
+            f_name = os.path.join(file_path, f)
+            all_file.append(f_name)
+        return all_file
 
 
 
@@ -679,6 +705,8 @@ class WebKey:
                 time.sleep(2.5)
 
 
+
+#下载
 
 
 
