@@ -525,6 +525,28 @@ class WebKey:
         get_attribute = self.driver.get_attribute(name)
         return get_attribute
 
+    def getDownLoadedFileName(self):
+        '''
+        fileName：获取下载的文件的名称
+        sourceURL：获取下载的文件的url
+        :return:
+        '''
+        # open a new tab
+        self.driver.execute_script("window.open()")
+        # switch to new tab
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        # navigate to chrome downloads
+        self.driver.get('chrome://downloads')
+        # get the latest downloaded file name
+        fileName = self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text")
+        # get the latest downloaded file url
+        sourceURL = self.driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href")
+        # close the downloads tab2
+        self.driver.close()
+        # switch back to main window
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        return fileName
+
 
 #断言
     def assert_results(self,ele_type=None,locator=None,Deserved_results=None):
