@@ -2,31 +2,32 @@
 import allure
 import pytest
 import time
+from common.cls.public import CommonPublic
 from Web.em import youjian
-from Web.webkeys import WebKey
+from Web.appkeys import AppKey
 from ddt.params import demo_sql_params
 demo_sql = demo_sql_params()
+CommonPublic = CommonPublic()
+
 @allure.feature('项目名称')
 class Test_Commerce:
     num = 0
     title = ''
-    def setup_class(self):
-        self.web = WebKey()
 
-    def setup_method(self):
-        '''添加上flaky装饰器会有list 超限问题，暂时不知道怎么解决'''
+    def setup_class(self):
+        self.web = AppKey()
+
+    @staticmethod
+    def setup_method():
         table_ncols = demo_sql[Test_Commerce.num:Test_Commerce.num + 1][0]
         Test_Commerce.title = table_ncols[0:][0]
-    # 安装pytest-rerunfailures插件
-    # reruns：代表 当case 执行失败的时候 回溯失败case的次数
-    # reruns_delay : 代表 回溯case的 间隔时间
-    # 如果不是服务器或者程序自身并发限制导致的问题 而是case本身的问题 也会rerun
-    @pytest.mark.flaky(reruns=2, reruns_dalay=4)
-    @allure.story('用例:%s'%title)
+
+    @allure.story('用例:%s' % title)
     @pytest.mark.parametrize('table', demo_sql)
-    def test_login(self,table):
-        testcases = table[1:]
-        for table_num in range(1,len(testcases)):
+    def test_login(self, table):
+        testcases = table[2:]
+        testcasess = table[1]
+        for table_num in range(1, len(testcases)):
             if testcases[table_num] == None:
                 testcases[table_num] = ''
             else:
@@ -39,37 +40,52 @@ class Test_Commerce:
             Deserved_results = self.web.Deserved_results
             try:
                 assert assert_results == Deserved_results, 'F'
+                CommonPublic.log("F")
+                CommonPublic.log(testcasess)
                 print('T')
-                print(testcases)
+                print(testcasess)
 
-            except AssertionError as e:
-                print(e)
-                print(testcases)
-                pass
+            except AssertionError as msg:
+                CommonPublic.log(msg)
+                CommonPublic.log(testcasess)
+                print(msg)
+                print(testcasess)
+
         elif testcases[0] == 'is_displayed':
             is_displayed = func(*values)
             try:
                 assert is_displayed == True
+                CommonPublic.log("T")
+                CommonPublic.log(testcasess)
                 print('T')
-                print(testcases)
+                print(testcasess)
             except AssertionError:
+                CommonPublic.log("F")
+                CommonPublic.log(testcasess)
                 print('F')
-                print(testcases)
-                pass
+                print(testcasess)
+
         elif testcases[0] =='title1':
             title = func(*values)
             try:
                 assert title == testcases[1]
+                CommonPublic.log("T")
+                CommonPublic.log(testcasess)
                 print('T')
                 print(testcases)
+
             except AssertionError:
+                CommonPublic.log("F")
+                CommonPublic.log(testcasess)
                 print('F')
-                print(testcases)
-                pass
+                print(testcasess)
+
         else:
             func(*values)
+            CommonPublic.log("T")
+            CommonPublic.log(testcasess)
             print('T')
-            print(testcases)
+            print(testcasess)
             time.sleep(0.5)
 
     def teardown_method(self):

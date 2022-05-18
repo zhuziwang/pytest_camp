@@ -5,9 +5,10 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 import time
+from common.cls.public import SeleniumKeys
 from pathlib import Path        #导入path
 
-class WebKey:
+class WebKey(SeleniumKeys):
 
     def __init__(self):
         self.driver = None
@@ -281,7 +282,7 @@ class WebKey:
         ActionChains(self.driver).move_to_element(element).perform()
 
     def send_keys(self,ele_type=None,locator=None,value=None,ctrl_value=None):
-        '''
+        """
         键盘输入
         Parameters
         ----------
@@ -298,9 +299,9 @@ class WebKey:
         Keys.F1…Fn：键盘 F1…Fn
         Returns
         -------
-        '''
-        ele = self.test_element(ele_type,locator)
-        ele.send_keys(value,str(ctrl_value))
+        """
+        ele = self.test_element(ele_type, locator)
+        ele.send_keys(value, str(ctrl_value))
 
     def input(self,ele_type=None,locator=None,value=None,num=None):
         '''

@@ -14,7 +14,7 @@ class py_mysql():
         cursor = py_mysql.db.cursor()
         cursor.execute(sql)
         data=cursor.fetchone()
-        print(data)
+        # print(data)
         # cursor.close()
 
         return data

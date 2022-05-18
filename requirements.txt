@@ -6,6 +6,7 @@ pytest-html	#（用于生成html格式的自动化测试报告）
 allure-pytest	#用于生成美观的测试报告
 pyyaml
 
+
 # 安卓
 appium-python-client
 #https://pypi.tuna.tsinghua.edu.cn/simple/
