@@ -4,14 +4,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
-import time
 from common.base_log.log import Log
 from pathlib import Path
 import time
 from appium import webdriver
 import os
 from models.sql import py_mysql
-
 
 
 class CommonPublic:
@@ -22,13 +20,15 @@ class CommonPublic:
     def log(self, msg):
         self.logger.debug(msg)
 
-    def base_dir(self):
+    @staticmethod
+    def base_dir():
         """
         获取项目地址：C:\\Users\\duia\\PycharmProjects\\pytest_camp
         :return:
         """
         base_dir = Path(__file__).resolve().parent.parent
         return base_dir
+
 
 class AppniumKeys(CommonPublic):
     def __init__(self):
@@ -49,20 +49,21 @@ class AppniumKeys(CommonPublic):
     }
 
     def open_app(self):
-        all_appPackage = os.popen('adb shell pm list packages').read()
-        appPackage = 'com.duia.duiaapp'
-        if appPackage in all_appPackage:
-            AndroidVersion = os.popen('adb shell getprop ro.build.version.release').read()
-            AppniumKeys.desired_caps_phone['platformVersion'] = AndroidVersion
+        all_apppackage = os.popen('adb shell pm list packages').read()
+        app_package = 'com.duia.duiaapp'
+        if app_package in all_apppackage:
+            android_version = os.popen('adb shell getprop ro.build.version.release').read()
+            AppniumKeys.desired_caps_phone['platformVersion'] = android_version
             self.driver = webdriver.Remote('http://localhost:4723/wd/hub', AppniumKeys.desired_caps_phone)
         else:
-            AppniumKeys.log(self, "没有该app：%s" % appPackage)
-            print("没有该app：%s" % appPackage)
+            AppniumKeys.log(self, "没有该app：%s" % app_package)
+            print("没有该app：%s" % app_package)
 
     def context(self, context):
         """
+        :param context: 切换
         : 切换app和webview
-        :param switch: WEBVIEW / NATIVEAPP / undefined
+        :param : WEBVIEW / NATIVEAPP / undefined
         :return:
         """
         self.driver.switch_to.context(context)
@@ -206,6 +207,10 @@ class AppniumKeys(CommonPublic):
         """
         输入键值：UiAutomator2中有bug无法使用，可以切换为Appnium或者使用搜狗输入法输入后，在执行一下代码
                 使用搜狗输入法的教程地址：“ https://blog.csdn.net/qq_60566718/article/details/122868696 ”
+        :param ele_type: 元素的类型
+        :param locator: 元素的值
+        :param send: 输入的内容
+        :param num: 元素是第几个
         :param keycode: 3、HOME键
                     82、菜单键
                     4、返回键
@@ -309,6 +314,7 @@ class AppniumKeys(CommonPublic):
     def pymysql(sql=None):
         py_mysql.mysql(sql)
 
+
 class SeleniumKeys(CommonPublic):
     def __init__(self):
         self.driver = None
@@ -324,7 +330,7 @@ class SeleniumKeys(CommonPublic):
             str_time = self.str_time()
             str_time = str(str_time)
             base_dir = self.base_dir()
-            file_path = base_dir+'\\download\\Chrome_download\\'+str_time+'\\'
+            file_path = str(base_dir)+'\\download\\Chrome_download\\'+str_time+'\\'
             options = webdriver.ChromeOptions()
             prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': file_path}
             options.add_experimental_option('prefs', prefs)
@@ -341,7 +347,8 @@ class SeleniumKeys(CommonPublic):
         # 默认隐式等待20s
         self.driver.implicitly_wait(5)
 
-    def driver_time(self, time_time=None):
+    @staticmethod
+    def driver_time(time_time=None):
         time.sleep(float(time_time))
 
     def geturl(self, url=None):
@@ -392,7 +399,8 @@ class SeleniumKeys(CommonPublic):
         """
         self.driver.quit()
 
-    def str_time(self):
+    @staticmethod
+    def str_time():
         """
         :return: 返回当前系统时间：格式为：2016-03-20形式
         """
@@ -433,13 +441,14 @@ class SeleniumKeys(CommonPublic):
         时间输入框，输入明天的时间，格式XXXX/XX/XX2016-03-20 11:45:39
         """
         import datetime
-        a= datetime.datetime.now()
+        a = datetime.datetime.now()
         b = (a + datetime.timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')
         ele = self.test_element(ele_type, locator)
         ele.clear()
         ele.send_keys(str(b))
 
-    def get_allfile(self, file_path):
+    @staticmethod
+    def get_allfile(file_path):
         """
         获取所有文件
         listdir返回文件中所有目录
@@ -456,17 +465,17 @@ class SeleniumKeys(CommonPublic):
         """
         self.driver.maximize_window()
 
-    def set_window_size(self, outerWidth=None, outerHeight=None):
+    def set_window_size(self, outer_width=None, outer_height=None):
         """
         设置浏览器窗口的宽高
         Parameters
         ----------
-        outerWidth：浏览器窗口的宽
-        outerHeight：浏览器窗口的高
+        outer_width：浏览器窗口的宽
+        outer_height：浏览器窗口的高
         Returns
         -------
         """
-        self.driver.set_window_size(outerWidth, outerHeight)
+        self.driver.set_window_size(outer_width, outer_height)
 
     def test_element(self, ele_type='', locator='', num=None):
         """
@@ -574,7 +583,7 @@ class SeleniumKeys(CommonPublic):
         Returns：返回悬停显示的文本
         -------
         """
-        element = self.test_element(ele_type,locator)
+        element = self.test_element(ele_type, locator)
         ActionChains(self.driver).move_to_element(element).perform()
 
     def send_keys(self, ele_type=None, locator=None, value=None, ctrl_value=None):
@@ -717,7 +726,7 @@ class SeleniumKeys(CommonPublic):
             pass
         pass
 
-    def alert(self, choice=None, keysToSend=None):
+    def alert(self, choice=None, keys_to_send=None):
         """
         :text: 返回警告框文本
         :accept: 接受现有警告框
@@ -736,7 +745,7 @@ class SeleniumKeys(CommonPublic):
             del_alert.dismiss()
         elif choice == 'send_keys':
             del_alert = self.driver.switch_to.alert
-            del_alert.send_keys(keysToSend)
+            del_alert.send_keys(keys_to_send)
 
     def select(self, ele_type=None, locator=None, select_by=None, value=None):
         """
@@ -746,7 +755,7 @@ class SeleniumKeys(CommonPublic):
                     3、select_by_visible_testx:下拉框的文本值
         value: 输入的value值
         """
-        sel = self.test_element(ele_type,locator)
+        sel = self.test_element(ele_type, locator)
         if select_by == 'select_by_value':
             Select(sel).select_by_value(value)
         elif select_by == 'select_by_index':
@@ -803,7 +812,7 @@ class SeleniumKeys(CommonPublic):
         now_url = self.driver.current_url
         return now_url
 
-    def title1(self, test=None):
+    def title1(self):
         """
        获得当前页面的标题
         Returns

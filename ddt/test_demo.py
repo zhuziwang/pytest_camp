@@ -6,7 +6,7 @@ from common.cls.public import CommonPublic
 from Web.em import youjian
 from Web.appkeys import AppKey
 from ddt.params import demo_sql_params
-demo_sql = demo_sql_params()
+demo_sql = demo_sql_params('test1')
 CommonPublic = CommonPublic()
 
 @allure.feature('项目名称')
