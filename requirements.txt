@@ -8,7 +8,13 @@ pyyaml
 
 
 # 安卓
-appium-python-client
+appium-python-client~=2.2.0
 #https://pypi.tuna.tsinghua.edu.cn/simple/
 
 
+
+pytest~=7.1.2
+requests~=2.27.1
+selenium~=4.1.5
+pytesseract~=0.3.9
+opencv-python~=4.5.5.64

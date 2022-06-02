@@ -9,8 +9,9 @@ from ddt.params import demo_sql_params
 demo_sql = demo_sql_params('test1')
 CommonPublic = CommonPublic()
 
+
 @allure.feature('项目名称')
-class Test_Commerce:
+class TestCommerce:
     num = 0
     title = ''
 
@@ -19,8 +20,8 @@ class Test_Commerce:
 
     @staticmethod
     def setup_method():
-        table_ncols = demo_sql[Test_Commerce.num:Test_Commerce.num + 1][0]
-        Test_Commerce.title = table_ncols[0:][0]
+        table_ncols = demo_sql[TestCommerce.num:TestCommerce.num + 1][0]
+        TestCommerce.title = table_ncols[0:][0]
 
     @allure.story('用例:%s' % title)
     @pytest.mark.parametrize('table', demo_sql)
@@ -28,7 +29,7 @@ class Test_Commerce:
         testcases = table[2:]
         testcasess = table[1]
         for table_num in range(1, len(testcases)):
-            if testcases[table_num] == None:
+            if testcases[table_num] is None:
                 testcases[table_num] = ''
             else:
                 testcases[table_num] = testcases[table_num]
@@ -54,7 +55,7 @@ class Test_Commerce:
         elif testcases[0] == 'is_displayed':
             is_displayed = func(*values)
             try:
-                assert is_displayed == True
+                assert is_displayed is True
                 CommonPublic.log("T")
                 CommonPublic.log(testcasess)
                 print('T')
@@ -65,7 +66,7 @@ class Test_Commerce:
                 print('F')
                 print(testcasess)
 
-        elif testcases[0] =='title1':
+        elif testcases[0] == 'title1':
             title = func(*values)
             try:
                 assert title == testcases[1]
@@ -88,11 +89,7 @@ class Test_Commerce:
             print(testcasess)
             time.sleep(0.5)
 
-    def teardown_method(self):
-        Test_Commerce.num = Test_Commerce.num +1
-        print(Test_Commerce.num)
-#
-# youjian=youjian()
-    #
-    # def teardown_class(self):
-    #     time.sleep(2)
+    @staticmethod
+    def teardown_method():
+        TestCommerce.num = TestCommerce.num + 1
+        print(TestCommerce.num)

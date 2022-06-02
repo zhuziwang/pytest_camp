@@ -3,8 +3,7 @@ import time
 # import runtime
 from appium import webdriver
 import os
-from common.cls.public import AppniumKeys
-
+from common.cls.app_public import AppiumKeys
 
 '''
 不要动，不用改
@@ -43,13 +42,10 @@ desired_caps_simulator = {
 '''
 
 
-
-class AppKey(AppniumKeys):
+class AppKey(AppiumKeys):
 
     def __init__(self):
         self.driver = None
-
-
 
     def login(self,username='', password=''):
         '''

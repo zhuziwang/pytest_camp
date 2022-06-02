@@ -5,25 +5,25 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
 import time
-from common.cls.public import SeleniumKeys
+from common.cls.web_public import SeleniumKeys
 from pathlib import Path        #导入path
+
 
 class WebKey(SeleniumKeys):
 
     def __init__(self):
         self.driver = None
 
-
-    def assert_results(self,ele_type=None,locator=None,Deserved_results=None):
+    def assert_results(self, ele_type=None, locator=None, Deserved_results=None):
         '''text断言'''
         self.Deserved_results = Deserved_results
-        Actual_results = self.test_element(ele_type,locator).text
+        Actual_results = self.test_element(ele_type, locator).text
         return Actual_results
 
-    def assert_results_img_src(self,ele_type=None,locator=None,Deserved_results=None):
+    def assert_results_img_src(self, ele_type=None, locator=None, Deserved_results=None):
         '''图片src断言'''
         self.Deserved_results = Deserved_results
-        Actual_results = self.test_element(ele_type,locator).get_attribute("src")
+        Actual_results = self.test_element(ele_type, locator).get_attribute("src")
         return Actual_results
 
     def is_displayed(self,ele_type=None,locator=None):
