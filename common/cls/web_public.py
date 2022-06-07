@@ -597,7 +597,7 @@ class SeleniumKeys(CommonPublic):
         """
         str_time_hms = SeleniumKeys.str_time_hms()
         str_time_hms = str(str_time_hms)
-        base_dir = SeleniumKeys.base_dir()
+        base_dir = CommonPublic.base_dir()
         if sign == 1:
             image_path = str(base_dir) + '\\image\\OCR\\img_bg_path\\' + str_time_hms + '.jpg'
         else:
@@ -678,11 +678,8 @@ class SeleniumKeys(CommonPublic):
 
     def do_match(self, bg_locator, slider_locator, mode='slow'):
         """
-        :param driver:
-        :param bg_type: 背景图片的元素的类型  By.ID,By.CLASS_NAME,By.NAME
-        :param bg_locator: 背景图片的元素的值
-        :param slider_type: 滑块图片的元素的类型  By.ID,By.CLASS_NAME,By.NAME
-        :param slider_locator:滑块图片的元素的值
+        :param bg_locator: 背景图片的元素的值          bg_type: 背景图片的元素的类型  By.ID,By.CLASS_NAME,By.NAME
+        :param slider_locator:滑块图片的元素的值     slider_type: 滑块图片的元素的类型  By.ID,By.CLASS_NAME,By.NAME
         :param mode: 一直等于slow，
         :return: 释放滑块
         """
@@ -693,12 +690,12 @@ class SeleniumKeys(CommonPublic):
         bg_image_url = bg_image.get_attribute('src')
         str_time_hms = SeleniumKeys.str_time_hms()
         str_time_hms = str(str_time_hms)
-        base_dir = SeleniumKeys.base_dir()
+        base_dir = CommonPublic.base_dir()
         img_bg_path = str(base_dir) + '\\image\\OCR\\img_bg_path\\' + str_time_hms + '.jpg'
         # 背景图片，将URL表示的网络对象复制到本地文件
         urllib.request.urlretrieve(bg_image_url, img_bg_path)
         # 把本地下载的网络图片，进行缩放，缩放到网页显示尺寸
-        img_bg_path = SeleniumKeys.resize_img(img_bg_path, 1)
+        img_bg_path = self.resize_img(img_bg_path, 1)
         # 等待wait秒，判断是否加载
         slider = wait.until(expected_conditions.presence_of_element_located((By.XPATH, slider_locator)))
         # 滑动模块图片
@@ -707,15 +704,15 @@ class SeleniumKeys(CommonPublic):
         # 滑动图片，将URL表示的网络对象复制到本地文件
         urllib.request.urlretrieve(slider_url, img_slider_path)
         # 把本地下载的网络图片，进行缩放，缩放到网页显示尺寸
-        img_slider_path = SeleniumKeys.resize_img(img_slider_path, 2)
-        value_1, value_2 = SeleniumKeys.find_pic(img_bg_path, img_slider_path)  # 最差匹配，最佳匹配
+        img_slider_path = self.resize_img(img_slider_path, 2)
+        value_1, value_2 = self.find_pic(img_bg_path, img_slider_path)  # 最差匹配，最佳匹配
         action = ActionChains(self.driver)
         # 可能不对，slider返回的是信息
         action.move_to_element(slider)
         # 按住滑块slider，slider：需要是一个定位
         action.click_and_hold(slider).perform()
         if mode == 'slow':
-            forward_tracks, back_tracks = SeleniumKeys.generate_tracks(value_2)
+            forward_tracks, back_tracks = self.generate_tracks(value_2)
 
             for x in forward_tracks:
                 # #移动滑块 0：y轴的移动距离
@@ -731,7 +728,7 @@ class SeleniumKeys(CommonPublic):
         while True:
             try:
                 self.do_match(bg_locator, slider_locator, mode)
-                if self.test_element('xpaths', bg_locator) is not None:
+                if self.test_element('xpaths', bg_locator):
                     self.do_match(bg_locator, slider_locator, mode)
                 else:
                     pass
