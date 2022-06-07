@@ -731,6 +731,9 @@ class SeleniumKeys(CommonPublic):
         while True:
             try:
                 self.do_match(bg_locator, slider_locator, mode)
-                break
+                if self.test_element('xpaths', bg_locator) is not None:
+                    self.do_match(bg_locator, slider_locator, mode)
+                else:
+                    pass
             except AssertionError as msg:
                 print(msg)
