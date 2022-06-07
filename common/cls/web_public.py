@@ -10,6 +10,8 @@ import time
 import os
 
 import cv2 as cv
+from functools import reduce
+from PIL import Image
 
 # words_ocr,find_pic,generate_tracks,do_match,match_code
 import urllib
@@ -586,6 +588,32 @@ class SeleniumKeys(CommonPublic):
         return action.text()
 
     @staticmethod
+    def resize_img(img, sign):
+        """
+        下载的图片把网页中的图片进行了放大，所以将图片还原成原尺寸
+        :param sign: 标记，1为背景图，2为滑块图
+        :param img: 图片
+        :return: 返回还原后的图片
+        """
+        str_time_hms = SeleniumKeys.str_time_hms()
+        str_time_hms = str(str_time_hms)
+        base_dir = SeleniumKeys.base_dir()
+        if sign == 1:
+            image_path = str(base_dir) + '\\image\\OCR\\img_bg_path\\' + str_time_hms + '.jpg'
+        else:
+            image_path = str(base_dir) + '\\image\\OCR\\img_slider_path\\' + str_time_hms + '.png'
+
+        a = 0.85  # 通过本地图片与原网页图片的比较，计算出的缩放比例
+        img = Image.open(img)
+        x = img.width
+        y = img.height
+        x_resize = int(x * a)
+        y_resize = int(y * a)
+        img = img.resize((x_resize, y_resize), Image.ANTIALIAS)
+        img.save(image_path)
+        return image_path
+
+    @staticmethod
     def find_pic(img_bg_path, img_slider_path):
         """
         找出图像中最佳匹配位置
@@ -619,14 +647,13 @@ class SeleniumKeys(CommonPublic):
         res = cv.matchTemplate(img_bg_gray, img_slider_gray, cv.TM_CCOEFF_NORMED)
         # 找出矩阵中的最大值和最小值，给出它们中的坐标
         value = cv.minMaxLoc(res)
-        print(value[2:][0][0], value[2:][1][0])
         return value[2:][0][0], value[2:][1][0]
 
     # 返回两个数组：一个用于加速拖动滑块，一个用于减速拖动滑块
     @staticmethod
     def generate_tracks(distance):
         # 给距离加上20，这20像素用在滑块滑过缺口后，减速折返回到缺口
-        distance += 1
+        distance += 20
         v = 0
         t = 0.2
         forward_tracks = []
@@ -642,11 +669,14 @@ class SeleniumKeys(CommonPublic):
             current += s
             forward_tracks.append(round(s))
 
-        back_tracks = [-3, -3, -2, -2, -2, -2, -2, -1, -1, -1, -1]
-        print(forward_tracks, back_tracks)
+        ft_sum = reduce(lambda x, y: x + y, forward_tracks)
+        distance -= 20
+        back_tracks_sum = ft_sum - distance
+        back_tracks = CommonPublic.random_num_vaccine_person_total(back_tracks_sum, 5)
+        back_tracks = [-x for x in back_tracks]
         return forward_tracks, back_tracks
 
-    def do_match(self, bg_type, bg_locator, slider_type, slider_locator, mode='slow'):
+    def do_match(self, bg_locator, slider_locator, mode='slow'):
         """
         :param driver:
         :param bg_type: 背景图片的元素的类型  By.ID,By.CLASS_NAME,By.NAME
@@ -656,7 +686,7 @@ class SeleniumKeys(CommonPublic):
         :param mode: 一直等于slow，
         :return: 释放滑块
         """
-        wait = WebDriverWait(self.driver, 5)
+        wait = WebDriverWait(self.driver, 10)
         bg_image = wait.until(expected_conditions.presence_of_element_located((By.XPATH, bg_locator)))
         # 背景图片
         time.sleep(1)
@@ -664,9 +694,11 @@ class SeleniumKeys(CommonPublic):
         str_time_hms = SeleniumKeys.str_time_hms()
         str_time_hms = str(str_time_hms)
         base_dir = SeleniumKeys.base_dir()
-        img_bg_path = str(base_dir) + '\\image\\OCR\\img_bg_path\\' + str_time_hms + '.png'
+        img_bg_path = str(base_dir) + '\\image\\OCR\\img_bg_path\\' + str_time_hms + '.jpg'
         # 背景图片，将URL表示的网络对象复制到本地文件
         urllib.request.urlretrieve(bg_image_url, img_bg_path)
+        # 把本地下载的网络图片，进行缩放，缩放到网页显示尺寸
+        img_bg_path = SeleniumKeys.resize_img(img_bg_path, 1)
         # 等待wait秒，判断是否加载
         slider = wait.until(expected_conditions.presence_of_element_located((By.XPATH, slider_locator)))
         # 滑动模块图片
@@ -674,6 +706,8 @@ class SeleniumKeys(CommonPublic):
         img_slider_path = str(base_dir) + '\\image\\OCR\\img_slider_path\\' + str_time_hms + '.png'
         # 滑动图片，将URL表示的网络对象复制到本地文件
         urllib.request.urlretrieve(slider_url, img_slider_path)
+        # 把本地下载的网络图片，进行缩放，缩放到网页显示尺寸
+        img_slider_path = SeleniumKeys.resize_img(img_slider_path, 2)
         value_1, value_2 = SeleniumKeys.find_pic(img_bg_path, img_slider_path)  # 最差匹配，最佳匹配
         action = ActionChains(self.driver)
         # 可能不对，slider返回的是信息
@@ -693,10 +727,10 @@ class SeleniumKeys(CommonPublic):
         # 释放滑块
         action.release().perform()
 
-    def match_code(self, bg_type, bg_locator, slider_type, slider_locator, mode='slow'):
+    def match_code(self, bg_locator, slider_locator, mode='slow'):
         while True:
             try:
-                self.do_match(bg_type, bg_locator, slider_type, slider_locator, mode)
+                self.do_match(bg_locator, slider_locator, mode)
                 break
             except AssertionError as msg:
                 print(msg)
