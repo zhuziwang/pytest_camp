@@ -28,12 +28,14 @@ import xlrd
 '''
 使用单个excel表表中的多个sheet
 '''
-def sheet_to_list (excel_file_path):
+
+
+def sheet_to_list(excel_file_path):
     lst = []
     row_num = 0
     with xlrd.open_workbook(excel_file_path) as f:
         sheet_all = f.sheet_names()
-        for i in range(0,len(sheet_all)):
+        for i in range(0, len(sheet_all)):
             # print(len(sheet_all))
             table = sheet_all[i]
             # print(table)

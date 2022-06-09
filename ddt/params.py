@@ -17,10 +17,10 @@ def app_excel_params():
 
 
 def demo_sql_params(table):
-    from models.model_sql import py_mysql
-    py_mysql = py_mysql()
-    sql1 = "select title,step,method,test_type,locator,value,keycode from %s" % table
-    data = py_mysql.mysql(sql1)
+    from models.model_sql import PyMysql
+    sql1 = "select * from %s" % table
+    data = PyMysql.mysql(sql1)
     CommonPublic.log(data)
     return data
+
 

@@ -32,14 +32,7 @@ class SeleniumKeys(CommonPublic):
         :return:
         """
         if br == 'Chrome':
-            str_time = self.str_time()
-            str_time = str(str_time)
-            base_dir = self.base_dir()
-            file_path = str(base_dir)+'\\download\\Chrome_download\\'+str_time+'\\'
-            options = webdriver.ChromeOptions()
-            prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': file_path}
-            options.add_experimental_option('prefs', prefs)
-            self.driver = webdriver.Chrome(chrome_options=options)
+            self.driver = webdriver.Chrome()
         elif br == 'edg':
             self.driver = webdriver.Edge()
         elif br == 'Firefox':
@@ -733,4 +726,4 @@ class SeleniumKeys(CommonPublic):
                 else:
                     pass
             except AssertionError as msg:
-                print(msg)
+                self.log(msg)

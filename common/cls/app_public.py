@@ -2,7 +2,7 @@
 import time
 from appium import webdriver
 import os
-from models.sql import py_mysql
+from models.sql import PyMysql
 
 from public import CommonPublic
 
@@ -289,8 +289,8 @@ class AppiumKeys(CommonPublic):
         print(title)
         return title
 
-    py_mysql = py_mysql()
+    PyMysql = PyMysql()
 
     @staticmethod
     def pymysql(sql=None):
-        py_mysql.mysql(sql)
+        PyMysql.mysql(sql)

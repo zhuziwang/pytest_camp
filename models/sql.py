@@ -1,6 +1,7 @@
 import pymysql
 
-class py_mysql():
+
+class PyMysql:
     db = pymysql.connect(
         host='localhost',
         port=3306,
@@ -9,11 +10,13 @@ class py_mysql():
         database='mapping',
         charset='utf8'
     )
-    def mysql(self,sql=None):
 
-        cursor = py_mysql.db.cursor()
+    @staticmethod
+    def mysql(sql=None):
+
+        cursor = PyMysql.db.cursor()
         cursor.execute(sql)
-        data=cursor.fetchone()
+        data = cursor.fetchone()
         # print(data)
         # cursor.close()
 

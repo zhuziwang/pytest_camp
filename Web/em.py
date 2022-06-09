@@ -1,16 +1,16 @@
-#coding=utf-8
+# coding=utf-8
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 from email.mime.image import MIMEImage  # 图片类型邮件
-import os
-from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart  # 创建附件类型
 from Web.webkeys import WebKey
+
+
 def youjian():
-    W=WebKey()
-    picture_name=W.picture()
-    str_time=W.str_time()
+    w = WebKey()
+    picture_name = w.picture()
+    str_time = w.str_time()
 
     sender = '***@qq.com'  # 发送使用的邮箱
     receivers = ['*****@qq.com']  # 收件人，可以是多个任意邮箱
@@ -22,33 +22,30 @@ def youjian():
 
     # 邮件正文
     message = MIMEText(mail_msg, 'html', 'utf-8')
-    msgRoot = MIMEMultipart('related')  # 邮件类型，如果要加图片等附件，就得是这个
+    msg_root = MIMEMultipart('related')  # 邮件类型，如果要加图片等附件，就得是这个
     message['From'] = Header("朱**", 'utf-8')  # 发送者
     message['To'] = Header("组长-**", 'utf-8')  # 接收者
-    #邮件标题
-    subject = ' (%s） 自动化测试结果'%str_time
-    msgRoot['Subject'] = Header(subject, 'utf-8')
-    msgRoot.attach(message)
+    # 邮件标题
+    subject = ' (%s） 自动化测试结果' % str_time
+    msg_root['Subject'] = Header(subject, 'utf-8')
+    msg_root.attach(message)
     # 添加图片附件
-    file_name= 'C:\\Users\\Administrator\\PycharmProjects\\kouyu100\\image\\picture\\%s'%picture_name
+    file_name = 'C:\\Users\\Administrator\\PycharmProjects\\kouyu100\\image\\picture\\%s' % picture_name
     fp = open(file_name, 'rb')
-    msgImage = MIMEImage(fp.read())
+    msg_image = MIMEImage(fp.read())
     fp.close()
-    msgImage.add_header('Content-ID', 'image1')  # 这个id用于上面html获取图片
-    msgRoot.attach(msgImage)
-
-
+    msg_image.add_header('Content-ID', 'image1')  # 这个id用于上面html获取图片
+    msg_root.attach(msg_image)
 
     try:
         smtp = smtplib.SMTP_SSL('smtp.qq.com')
-          # 登陆qq邮箱，密码需要使用的是授权码
+        # 登陆qq邮箱，密码需要使用的是授权码
         smtp.login(sender, '***')
-        smtp.sendmail(sender, receivers, msgRoot.as_string())
+        smtp.sendmail(sender, receivers, msg_root.as_string())
         smtp.quit()
-        print("邮件发送成功")
-    except smtplib.SMTPException:
-        print("Error: 无法发送邮件")
-
+        w.log("邮件发送成功")
+    except AssertionError as msg:
+        w.log(msg)
 
 
 def youjian111():
@@ -95,11 +92,8 @@ def youjian111():
         smtp = smtplib.SMTP()
         smtp.connect(smtpserver)
         smtp.login(sender, password)
-    except:
+    except AssertionError:
         smtp = smtplib.SMTP_SSL(smtpserver, port)
         smtp.login(sender, password)
     smtp.sendmail(sender, receicer, msg.as_string())
     smtp.quit()
-
-if __name__ == '__main__':
-    you=youjian()

@@ -130,8 +130,7 @@ class WebKey(SeleniumKeys):
         遍历单词选项，找到选项后，配以单词是否一致
         :return:
         """
-        from models.sql import py_mysql
-        py_mysql = py_mysql()
+        from models.sql import PyMysql
 
         for i in range(0, 2):
             test = self.test_element('class_name', 'word-topic', 0).text
@@ -139,9 +138,9 @@ class WebKey(SeleniumKeys):
             test_str = test[4:]
             sql0 = "SELECT word from w2m_wordclass where cnText = '{}' LIMIT 1;" .format(test_str)
             sql1 = "SELECT word from w2m_wordclass where cnText like '{}%' LIMIT 1;" .format(test_str)
-            fanyi0 = py_mysql.mysql(sql0)
+            fanyi0 = PyMysql.mysql(sql0)
             if str(fanyi0) == 'None':
-                fanyi1 = py_mysql.mysql(sql1)
+                fanyi1 = PyMysql.mysql(sql1)
                 eng_fanyi = fanyi1[0]
             else:
                 eng_fanyi = fanyi0[0]

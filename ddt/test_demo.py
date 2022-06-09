@@ -1,12 +1,14 @@
-#conding=utf-8
+# coding=utf-8
 import allure
 import pytest
 import time
-from common.cls.public import CommonPublic
+
+import common.cls.public
 from Web.em import youjian
-from Web.appkeys import AppKey
+from Web.webkeys import WebKey
+from common.cls.public import CommonPublic
 from ddt.params import demo_sql_params
-demo_sql = demo_sql_params('test1')
+demo_sql = demo_sql_params('yongli1')
 CommonPublic = CommonPublic()
 
 
@@ -16,7 +18,7 @@ class TestCommerce:
     title = ''
 
     def setup_class(self):
-        self.web = AppKey()
+        self.web = WebKey()
 
     @staticmethod
     def setup_method():
@@ -36,60 +38,14 @@ class TestCommerce:
         testcases = [i for i in testcases if i != '']
         func = getattr(self.web, testcases[0])
         values = testcases[1:]
-        if testcases[0] == 'assert_results':
-            assert_results = func(*values)
-            Deserved_results = self.web.Deserved_results
-            try:
-                assert assert_results == Deserved_results, 'F'
-                CommonPublic.log("F")
-                CommonPublic.log(testcasess)
-                print('T')
-                print(testcasess)
-
-            except AssertionError as msg:
-                CommonPublic.log(msg)
-                CommonPublic.log(testcasess)
-                print(msg)
-                print(testcasess)
-
-        elif testcases[0] == 'is_displayed':
-            is_displayed = func(*values)
-            try:
-                assert is_displayed is True
-                CommonPublic.log("T")
-                CommonPublic.log(testcasess)
-                print('T')
-                print(testcasess)
-            except AssertionError:
-                CommonPublic.log("F")
-                CommonPublic.log(testcasess)
-                print('F')
-                print(testcasess)
-
-        elif testcases[0] == 'title1':
-            title = func(*values)
-            try:
-                assert title == testcases[1]
-                CommonPublic.log("T")
-                CommonPublic.log(testcasess)
-                print('T')
-                print(testcases)
-
-            except AssertionError:
-                CommonPublic.log("F")
-                CommonPublic.log(testcasess)
-                print('F')
-                print(testcasess)
-
-        else:
+        try:
             func(*values)
-            CommonPublic.log("T")
             CommonPublic.log(testcasess)
-            print('T')
-            print(testcasess)
-            time.sleep(0.5)
+
+        except AssertionError as msg:
+            CommonPublic.log(testcases)
+            CommonPublic.log(msg)
 
     @staticmethod
     def teardown_method():
         TestCommerce.num = TestCommerce.num + 1
-        print(TestCommerce.num)
