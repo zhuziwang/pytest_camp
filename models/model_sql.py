@@ -19,6 +19,14 @@ class PyMysql:
         cursor = PyMysql.db.cursor()
         cursor.execute(sql)
         data = cursor.fetchall()
+
+        return data
+
+    @staticmethod
+    def case(sql=None):
+        cursor = PyMysql.db.cursor()
+        cursor.execute(sql)
+        data = cursor.fetchall()
         list_data = list(data)
         data = []
         for i in range(0, len(list_data)):
@@ -30,13 +38,14 @@ class PyMysql:
         while i < l_data:
             for i in range(0, l_data):
                 len_data_data = len(data[i])
-                a = 3
-                for x in range(3, len_data_data):
+                a = 4
+                for x in range(4, len_data_data):
                     if a <= len_data_data and ((data[i][a] is None) or (data[i][a] == '')):
                         del data[i][a]
                     else:
                         a += 1
             i += 1
         cursor.close()
+
         return data
 
