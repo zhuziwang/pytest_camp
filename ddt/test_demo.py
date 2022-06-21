@@ -8,7 +8,7 @@ from Web.em import youjian
 from Web.webkeys import WebKey
 from common.cls.public import CommonPublic
 from ddt.params import demo_sql_params
-demo_sql = demo_sql_params('yongli1')
+demo_sql = demo_sql_params('app_test')
 CommonPublic = CommonPublic()
 
 
@@ -28,19 +28,13 @@ class TestCommerce:
     @allure.story('用例:%s' % title)
     @pytest.mark.parametrize('table', demo_sql)
     def test_login(self, table):
-        testcases = table[2:]
-        testcasess = table[1]
-        for table_num in range(1, len(testcases)):
-            if testcases[table_num] is None:
-                testcases[table_num] = ''
-            else:
-                testcases[table_num] = testcases[table_num]
+        testcases = table[4:]
         testcases = [i for i in testcases if i != '']
         func = getattr(self.web, testcases[0])
         values = testcases[1:]
         try:
             func(*values)
-            CommonPublic.log(testcasess)
+            CommonPublic.log(testcases)
 
         except AssertionError as msg:
             CommonPublic.log(testcases)
