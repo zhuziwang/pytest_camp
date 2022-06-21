@@ -182,6 +182,12 @@ class SeleniumKeys(CommonPublic):
 
     def test_element(self, ele_type='', locator='', num=None):
         """
+        4.0.0以上建议使用：find_element()方法
+        find_element():    只有以下四种
+                        1.By.ID
+                        2.By.TAG_NAME
+                        3.By.CLASS_NAME
+                        4.By.NAME
         定位方法
         :param ele_type: 类型
         :param locator:
@@ -525,10 +531,16 @@ class SeleniumKeys(CommonPublic):
         # print(title1)
         return title1
 
-    def get_attribute(self, name=None):
+    def get_attribute_name(self, bg_locator, name=None):
         """
         获取元素属性
         Parameters
+        find_element():    只有以下四种
+                        1.By.ID
+                        2.By.TAG_NAME
+                        3.By.CLASS_NAME
+                        4.By.NAME
+
         ----------
         name：1、获取元素标签的内容(文本信息)：textContent
               2、获取元素内的全部HTML：innerHTML
@@ -536,8 +548,9 @@ class SeleniumKeys(CommonPublic):
         Returns
         -------
         """
-        get_attribute = self.driver.get_attribute(name)
-        return get_attribute
+        ele = self.driver.find_element(By.CLASS_NAME, bg_locator)
+        get_attribute_name = ele.get_attribute(name)
+        return get_attribute_name
 
     def get_downloaded_filename(self):
         """
@@ -619,6 +632,7 @@ class SeleniumKeys(CommonPublic):
         img_bg = cv.imread(img_bg_path)
         # 背景图片 把图片img_bg 进行色彩空间转换，转换为RGB <---> Gray：CV_RGB2GRAY
         gray_image = cv.cvtColor(img_bg, cv.COLOR_BGR2GRAY)
+        # gray_image = gray_image.convert("RGB")gray_image = gray_image.convert("RGB")
         # 背景图片 设定图片的灰色像素阈值点，使图片变成灰色图片   返回参数ret：当前图片像素阈值与设置的一致，参数thresh：返回的图片
         ret, thresh = cv.threshold(gray_image, 127, 255, cv.THRESH_TOZERO)
         # 背景图片 图片保存到img_bg_path位置
@@ -676,8 +690,8 @@ class SeleniumKeys(CommonPublic):
         :param mode: 一直等于slow，
         :return: 释放滑块
         """
-        wait = WebDriverWait(self.driver, 10)
-        bg_image = wait.until(expected_conditions.presence_of_element_located((By.XPATH, bg_locator)))
+        wait = WebDriverWait(self.driver, 20)
+        bg_image = wait.until(expected_conditions.presence_of_element_located((By.CLASS_NAME, bg_locator)))
         # 背景图片
         time.sleep(1)
         bg_image_url = bg_image.get_attribute('src')
@@ -690,7 +704,7 @@ class SeleniumKeys(CommonPublic):
         # 把本地下载的网络图片，进行缩放，缩放到网页显示尺寸
         img_bg_path = self.resize_img(img_bg_path, 1)
         # 等待wait秒，判断是否加载
-        slider = wait.until(expected_conditions.presence_of_element_located((By.XPATH, slider_locator)))
+        slider = wait.until(expected_conditions.presence_of_element_located((By.CLASS_NAME, slider_locator)))
         # 滑动模块图片
         slider_url = slider.get_attribute('src')
         img_slider_path = str(base_dir) + '\\image\\OCR\\img_slider_path\\' + str_time_hms + '.png'
@@ -718,12 +732,8 @@ class SeleniumKeys(CommonPublic):
         action.release().perform()
 
     def match_code(self, bg_locator, slider_locator, mode='slow'):
-        while True:
-            try:
-                self.do_match(bg_locator, slider_locator, mode)
-                if self.test_element('xpaths', bg_locator):
-                    self.do_match(bg_locator, slider_locator, mode)
-                else:
-                    pass
-            except AssertionError as msg:
-                self.log(msg)
+        self.do_match(bg_locator, slider_locator, mode)
+        time.sleep(2)
+        while self.driver.find_elements(By.CLASS_NAME, bg_locator) != []:
+            self.do_match(bg_locator, slider_locator, mode)
+
