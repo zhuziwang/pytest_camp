@@ -27,7 +27,7 @@ class AppiumKeys(CommonPublic):
 
     def open_app(self):
         all_apppackage = os.popen('adb shell pm list packages').read()
-        app_package = 'com.duia.duiaapp'
+        app_package = 'com.android.browser'
         if app_package in all_apppackage:
             android_version = os.popen('adb shell getprop ro.build.version.release').read()
             AppiumKeys.desired_caps_phone['platformVersion'] = android_version
@@ -36,18 +36,19 @@ class AppiumKeys(CommonPublic):
             AppiumKeys.log(self, "没有该app：%s" % app_package)
             print("没有该app：%s" % app_package)
 
-    def context(self, contexts):
+    def switch_context(self, contexts):
         """
+        前置条件：WebView.setWebContentsDebuggingEnabled(true)
         :param contexts: 切换
         : 切换app和webview
-        :param : WEBVIEW / NATIVE_APP / undefined
+        :param : WEBVIEW_com.android_browser / NATIVE_APP / undefined
         :return:
         """
         if contexts == 'WEBVIEW':
-            contexts = self.driver.contexts
-            self.driver.switch_to.context(contexts[1])
+            webview = self.driver.contexts.last
+            self.driver.switch_to.context(webview)
         else:
-            self.driver.switch_to.context('NATIVE_APP')
+            self.driver.switch_to.context(self.driver.contexts.first)
 
     def test_element(self, ele_type='', locator='', num=''):
         """
