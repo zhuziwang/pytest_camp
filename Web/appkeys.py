@@ -1,9 +1,8 @@
 # coding=utf-8
 import time
-# import runtime
-from appium import webdriver
 import os
 from common.cls.app_public import AppiumKeys
+from models.model_sql_app import PyMysql
 
 '''
 不要动，不用改
@@ -47,20 +46,26 @@ class AppKey(AppiumKeys):
     def __init__(self):
         self.driver = None
 
-    def login(self, username='', password=''):
+    def login(self):
         """
-        点击登录
-        :param username:
-        :param password:
+        公共用例
         :return:
         """
-        name = self.test_element('id', 'com.arivoc.kouyu:id/et_username')
-        name.clear()
-        name.send_keys(username)
-        pws = self.test_element('id', 'com.arivoc.kouyu:id/et_password')
-        pws.clear()
-        pws.send_keys(password)
-        self.test_element('id', 'com.arivoc.kouyu:id/btn_login').click()
+        sql_press_keycode = PyMysql.mysql("select method,ele_type,locator,send,keycode,num from app_public_case")
+        ele_type = sql_press_keycode[0]
+        locator = sql_press_keycode[1]
+        send = sql_press_keycode[2]
+        keycode = sql_press_keycode[3]
+        num = sql_press_keycode[4]
+        self.open_app()
+        self.press_keycode(ele_type, locator, send, keycode, num)
+
+    def assert_equal(self, assert_type, ele_type, locator, expect):
+        if assert_type == 'text':
+            current_text = self.test_element(ele_type, locator).text
+            assert current_text == expect
+        elif assert_type == '':
+            self.test_element(ele_type, locator)
 
     def new_version_tips(self):
         """
