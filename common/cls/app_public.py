@@ -329,7 +329,7 @@ class AppiumKeys(CommonPublic):
         time.sleep(3)
         str_time_hms = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
         base_dir = CommonPublic.base_dir()
-        file_path = str(base_dir) + '\\image\\opencv\\app_phone_position\\' + str_time_hms + '.png'
+        file_path = str(base_dir) + '\\image\\opencv\\get_screenshot_as_file\\' + str_time_hms + '.png'
         self.driver.get_screenshot_as_file(file_path)
         # 获取第一次截图的宽高
         img = Image.open(phone_img_path)
