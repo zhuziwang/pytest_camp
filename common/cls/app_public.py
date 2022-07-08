@@ -4,7 +4,10 @@ from appium import webdriver
 import os
 from models.sql import PyMysql
 
-from public import CommonPublic
+import aircv as ac
+from PIL import Image
+
+from .public import CommonPublic
 
 
 class AppiumKeys(CommonPublic):
@@ -232,6 +235,9 @@ class AppiumKeys(CommonPublic):
         """
         self.driver.swipe(start_x, start_y, end_x, end_y, duration)
 
+    def tap(self, x, y):
+        self.driver.tap([(x, y)], 500)
+
     def get_screenshot_as_file(self, file_path=''):
         """
         截图，并保存
@@ -295,3 +301,50 @@ class AppiumKeys(CommonPublic):
     @staticmethod
     def pymysql(sql=None):
         PyMysql.mysql(sql)
+
+    @staticmethod
+    def matchimg(file_path, phone_img_path, phone_img_slider_path, confidencevalue=0.2):
+        """
+        :param file_path: 屏幕截图
+        :param phone_img_path: 手动截图的第一张
+        :param phone_img_slider_path: 手动截图的第二张
+        :param confidencevalue: 查找图片匹配成功的特征点 除以 总的特征点 数
+        :return:
+        """
+        file_img = ac.imread(file_path)
+        phone_img = ac.imread(phone_img_path)
+        phone_img_slider_img = ac.imread(phone_img_slider_path)
+        match_result = ac.find_template(file_img, phone_img, confidencevalue)
+        match_result_slider = ac.find_template(phone_img, phone_img_slider_img, confidencevalue)
+        return match_result, match_result_slider
+
+    def coordinate_point_click(self, phone_img_path, phone_img_slider_path):
+        """
+        注意：手动截的图需要把屏幕截图放大100%后，在进行截图才可以
+        :param phone_img_path: 自己手动截取的第一张图，大范围查找的图
+        :param phone_img_slider_path: 需要点击位置的图
+        :return:
+        """
+        # 截屏手机
+        time.sleep(3)
+        str_time_hms = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
+        base_dir = CommonPublic.base_dir()
+        file_path = str(base_dir) + '\\image\\opencv\\app_phone_position\\' + str_time_hms + '.png'
+        self.driver.get_screenshot_as_file(file_path)
+        # 获取第一次截图的宽高
+        img = Image.open(phone_img_path)
+        phone_position_width = img.width
+        phone_position_height = img.height
+
+        match_result, match_result_slider = self.matchimg(file_path, phone_img_path, phone_img_slider_path)
+
+        x1, y1 = match_result['result']
+        x2, y2 = match_result_slider['result']
+        left_x = x1 - phone_position_width / 2
+        left_y = y1 - phone_position_height / 2
+
+        x = left_x + x2
+        y = left_y + y2
+
+        print(x, y)
+        self.tap(x, y)
