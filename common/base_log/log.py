@@ -8,7 +8,7 @@ from logging import handlers
 
 class Log:
 
-    def __init__(self, level="ERROR"):
+    def __init__(self, level="DEBUG"):
         """
         日志器对象
         :param level: 级别

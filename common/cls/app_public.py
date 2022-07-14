@@ -329,9 +329,6 @@ class AppiumKeys(CommonPublic):
         time.sleep(3)
         str_time_hms = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
         base_dir = CommonPublic.base_dir()
-        phone_img_path = str(base_dir) + '\\image\\mysql_screenshot\\phone_img_path\\' + str(phone_img_path)
-        phone_img_slider_path = str(base_dir) + '\\image\\mysql_screenshot\\phone_img_slider_path\\' + str(
-                                phone_img_slider_path)
         file_path = str(base_dir) + '\\image\\opencv\\get_screenshot_as_file\\' + str_time_hms + '.png'
         self.driver.get_screenshot_as_file(file_path)
         # 获取第一次截图的宽高
@@ -341,6 +338,13 @@ class AppiumKeys(CommonPublic):
 
         match_result, match_result_slider = self.matchimg(file_path, phone_img_path, phone_img_slider_path)
 
+        a = 0
+        while match_result is None:
+            a += 1
+            match_result, match_result_slider = self.matchimg(file_path, phone_img_path, phone_img_slider_path)
+            if a == 3:
+                print("循环了3次，都不对")
+                break
         x1, y1 = match_result['result']
         x2, y2 = match_result_slider['result']
         left_x = x1 - phone_position_width / 2
