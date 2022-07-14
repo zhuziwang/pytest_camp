@@ -329,9 +329,6 @@ class AppiumKeys(CommonPublic):
         time.sleep(3)
         str_time_hms = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
         base_dir = CommonPublic.base_dir()
-        phone_img_path = str(base_dir) + '\\image\\mysql_screenshot\\phone_img_path\\' + str(phone_img_path)
-        phone_img_slider_path = str(base_dir) + '\\image\\mysql_screenshot\\phone_img_slider_path\\' + str(
-                                phone_img_slider_path)
         file_path = str(base_dir) + '\\image\\opencv\\get_screenshot_as_file\\' + str_time_hms + '.png'
         self.driver.get_screenshot_as_file(file_path)
         # 获取第一次截图的宽高
