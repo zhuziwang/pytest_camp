@@ -9,7 +9,6 @@ from selenium.webdriver.support import expected_conditions
 import time
 import os
 
-import cv2 as cv
 from functools import reduce
 from PIL import Image
 
@@ -605,9 +604,9 @@ class SeleniumKeys(CommonPublic):
         str_time_hms = str(str_time_hms)
         base_dir = CommonPublic.base_dir()
         if sign == 1:
-            image_path = str(base_dir) + '\\image\\OCR\\img_bg_path\\' + str_time_hms + '.jpg'
+            image_path = str(base_dir) + '\\image\\opencv\\web_img_bg_path\\' + str_time_hms + '.jpg'
         else:
-            image_path = str(base_dir) + '\\image\\OCR\\img_slider_path\\' + str_time_hms + '.png'
+            image_path = str(base_dir) + '\\image\\opencv\\web_img_slider_path\\' + str_time_hms + '.png'
 
         a = 0.85  # 通过本地图片与原网页图片的比较，计算出的缩放比例
         img = Image.open(img)
@@ -618,43 +617,6 @@ class SeleniumKeys(CommonPublic):
         img = img.resize((x_resize, y_resize), Image.ANTIALIAS)
         img.save(image_path)
         return image_path
-
-    @staticmethod
-    def find_pic(img_bg_path, img_slider_path):
-        """
-        找出图像中最佳匹配位置
-        :param img_bg_path: 滑块背景图本地路径
-        :param img_slider_path: 滑块图片本地路径
-        :return: 返回最差匹配、最佳匹配对应的x坐标
-        """
-        # 背景图片和滑块分别进行灰度 然后二值化 最后用TM_CCOEFF_NORMED进行对比
-        # 背景图片 把导入图片img_bg_path 以cv.imread()读取出宽高通道数据
-        img_bg = cv.imread(img_bg_path)
-        # 背景图片 把图片img_bg 进行色彩空间转换，转换为RGB <---> Gray：CV_RGB2GRAY
-        gray_image = cv.cvtColor(img_bg, cv.COLOR_BGR2GRAY)
-        # gray_image = gray_image.convert("RGB")gray_image = gray_image.convert("RGB")
-        # 背景图片 设定图片的灰色像素阈值点，使图片变成灰色图片   返回参数ret：当前图片像素阈值与设置的一致，参数thresh：返回的图片
-        ret, thresh = cv.threshold(gray_image, 127, 255, cv.THRESH_TOZERO)
-        # 背景图片 图片保存到img_bg_path位置
-        cv.imwrite(img_bg_path, thresh)
-        # 背景图片 读取img_bg_path图片
-        img_bg = cv.imread(img_bg_path)
-        # 背景图片 图片转换为灰度图片
-        img_bg_gray = cv.cvtColor(img_bg, cv.COLOR_BGR2GRAY)
-        # 滑块图片 0：读入灰色通道图片    1：读入彩色图片
-        img_slider_gray = cv.imread(img_slider_path, 0)
-        # 滑块图片 设定图片的灰色像素阈值点为170，最大80，类型2
-        ret, thresh = cv.threshold(img_slider_gray, 170, 80, cv.THRESH_TRUNC)
-        # 滑块图片 图片保存
-        cv.imwrite(img_slider_path, thresh)
-        #  滑块图片 读入灰色通道图片
-        img_slider_gray = cv.imread(img_slider_path, 0)
-
-        # matchTemplate：模板匹配的函数   img_bg_gray：背景图片  img_slider_gray：滑块图片    cv.TM_CCOEFF_NORMED：相关性系数匹配方法
-        res = cv.matchTemplate(img_bg_gray, img_slider_gray, cv.TM_CCOEFF_NORMED)
-        # 找出矩阵中的最大值和最小值，给出它们中的坐标
-        value = cv.minMaxLoc(res)
-        return value[2:][0][0], value[2:][1][0]
 
     # 返回两个数组：一个用于加速拖动滑块，一个用于减速拖动滑块
     @staticmethod
@@ -698,7 +660,7 @@ class SeleniumKeys(CommonPublic):
         str_time_hms = SeleniumKeys.str_time_hms()
         str_time_hms = str(str_time_hms)
         base_dir = CommonPublic.base_dir()
-        img_bg_path = str(base_dir) + '\\image\\OCR\\img_bg_path\\' + str_time_hms + '.jpg'
+        img_bg_path = str(base_dir) + '\\image\\opencv\\web_img_bg_path\\' + str_time_hms + '.jpg'
         # 背景图片，将URL表示的网络对象复制到本地文件
         urllib.request.urlretrieve(bg_image_url, img_bg_path)
         # 把本地下载的网络图片，进行缩放，缩放到网页显示尺寸
@@ -707,7 +669,7 @@ class SeleniumKeys(CommonPublic):
         slider = wait.until(expected_conditions.presence_of_element_located((By.CLASS_NAME, slider_locator)))
         # 滑动模块图片
         slider_url = slider.get_attribute('src')
-        img_slider_path = str(base_dir) + '\\image\\OCR\\img_slider_path\\' + str_time_hms + '.png'
+        img_slider_path = str(base_dir) + '\\image\\opencv\\web_img_slider_path\\' + str_time_hms + '.png'
         # 滑动图片，将URL表示的网络对象复制到本地文件
         urllib.request.urlretrieve(slider_url, img_slider_path)
         # 把本地下载的网络图片，进行缩放，缩放到网页显示尺寸

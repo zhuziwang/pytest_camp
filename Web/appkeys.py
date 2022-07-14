@@ -61,7 +61,7 @@ class AppKey(AppiumKeys):
         self.press_keycode(ele_type, locator, send, keycode, num)
 
     def assert_equal(self, assert_type, ele_type, locator, expect):
-        if assert_type == 'text':
+        if assert_type[0] == 'text':
             current_text = self.test_element(ele_type, locator).text
             assert current_text == expect
         elif assert_type == '':

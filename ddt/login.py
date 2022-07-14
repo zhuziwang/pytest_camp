@@ -1,42 +1,46 @@
 import allure
 import pytest
 import time
+from Web.em import youjian
 from Web.webkeys import WebKey
-from ddt.params import yaml_params
+from ddt.params import app_excel_params
+app_table_sheet = app_excel_params()
 
-datas=yaml_params()
-@allure.feature('这是项目名字')
-class Test_Commerce:
+
+@allure.feature('kou')
+class TestCommerce:
+    num = 1
+    title = ''
+
     def setup_class(self):
         self.web = WebKey()
-        self.web.openbrwser()
-    @allure.story('测试用例')
-    @pytest.mark.parametrize('listcases', datas['loginPage'])
-    def test_login(self,listcases):
-        testcases = listcases['cases']
-        for cases in testcases:
-            listcase = list(cases.values())   #把字典转成列表值
-            func = getattr(self.web,listcase[1])
-            values = listcase[2:]
-            print('values%s'%values)
-            if listcase[1] == 'assert_results':
-                assert_results = func(*values)
-                Deserved_results = self.web.Deserved_results
-                try:
-                    assert assert_results == Deserved_results,'F'
-                except AssertionError:
-                    assert assert_results == Deserved_results
-                else:
-                    func(*values)
-                finally:
-                    func(*values)
-            else:
-                func(*values)
-                print('T')
-                time.sleep(0.5)
 
+    @staticmethod
+    def setup_method():
+        table_ncols = app_table_sheet[TestCommerce.num:TestCommerce.num + 1][0]
+        TestCommerce.title = table_ncols[0:][0]
 
-    def teardown_class(self):
-        from Web.em import youjian
-        fasong = youjian()
-    #     self.web.quit()
+    @allure.story('用例:%s' % title)
+    @pytest.mark.parametrize('table', app_table_sheet[1:])
+    def test_login(self, table):
+        testcases = table[2:]
+        testcasess = table[1]
+        testcases = [i for i in testcases if i != '']
+        func = getattr(self.web, testcases[0])
+        values = testcases[1:]
+        try:
+            func(*values), 'T'
+            self.web.log("T")
+            self.web.log(testcasess)
+            print('T')
+            print(testcasess)
+
+        except AssertionError as msg:
+            self.web.log(msg)
+            self.web.log(testcasess)
+            print(msg)
+            print(testcasess)
+
+    @staticmethod
+    def teardown_method():
+        TestCommerce.num = TestCommerce.num + 1
