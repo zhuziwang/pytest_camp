@@ -338,6 +338,13 @@ class AppiumKeys(CommonPublic):
 
         match_result, match_result_slider = self.matchimg(file_path, phone_img_path, phone_img_slider_path)
 
+        a = 0
+        while match_result is None:
+            a += 1
+            match_result, match_result_slider = self.matchimg(file_path, phone_img_path, phone_img_slider_path)
+            if a == 3:
+                print("循环了3次，都不对")
+                break
         x1, y1 = match_result['result']
         x2, y2 = match_result_slider['result']
         left_x = x1 - phone_position_width / 2
