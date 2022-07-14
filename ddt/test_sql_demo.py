@@ -8,7 +8,7 @@ from ddt.params import demo_sql_params_group
 
 @allure.feature('项目名称：用例分组')
 class TestCommerce:
-    demo_sql = demo_sql_params_group('app_test')
+    demo_sql = demo_sql_params_group('nox_browser')
     CommonPublic = CommonPublic()
     num = 0
     title = ''
