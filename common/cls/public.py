@@ -61,9 +61,9 @@ class CommonPublic:
         # 安装baidu-aip。
         # 从aip中导入AipOcr
         # 替换APP_ID，API_KEY，SECRET_KEY
-        APP_ID = '26030780'
-        API_KEY = 'BM4wXk7l54tvW9GLSilCBWia'
-        SECRET_KEY = 'ksWfdmT5949GTvDEDNhhC3fuKSIlG8bl'
+        APP_ID = '**'
+        API_KEY = '**'
+        SECRET_KEY = '***'
         # 新建一个AipOcr，并赋值给变量client
         client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
 
