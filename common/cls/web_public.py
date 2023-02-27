@@ -24,13 +24,13 @@ class SeleniumKeys(CommonPublic):
         self.driver = None
         self.ele = None
 
-    def open_browser(self, br='Chrome'):
+    def open_browser(self, br='chrome'):
         """
         打开浏览器
         :param br: 如果是谷歌，profile.default_content_settings.popups：设置为0禁止弹出下载窗口
         :return:
         """
-        if br == 'Chrome':
+        if br == 'chrome':
             self.driver = webdriver.Chrome()
         elif br == 'edg':
             self.driver = webdriver.Edge()
@@ -106,6 +106,9 @@ class SeleniumKeys(CommonPublic):
 
     @staticmethod
     def str_time_hms():
+        """
+        :return: 返回当前系统时间：格式为：2016-03-20 11:45:39形式
+        """
         str_time = time.strftime("%Y-%m-%d %H-%M-%S", time.localtime())
         return str_time
 
@@ -487,10 +490,10 @@ class SeleniumKeys(CommonPublic):
         if name == 'get_cookies()':
             cookies = self.driver.get_cookies()
             return cookies
-        elif name == 'get_cookie(%s)%key':
+        elif name == 'get_cookie(%s)' % key:
             cookies_value = self.driver.get_cookies(key)
             return cookies_value
-        elif name == 'add_cookie(%s)%cookie_dict':
+        elif name == 'add_cookie(%s)' % cookie_dict:
             self.driver.add_cookie(cookie_dict)
         elif name == 'delete_all_cookies()':
             self.driver.delete_all_cookies()
